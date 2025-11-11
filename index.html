@@ -6,17 +6,21 @@
     <title>AWaDo Design</title>
     <link rel="icon" href="awado_icon.png" type="image/png">
     <style>
-        /* ==================================== 字体定义与应用（新增部分） ==================================== */
+        /* ==================================== 字体定义与应用（更新并优化） ==================================== */
         @font-face {
             font-family: 'AWD-Title-Font'; /* 自定义一个字体名称 */
-            src: url('awd_font.ttf') format('truetype'); /* 确保 awd_font.ttf 文件与此 HTML 文件在同一目录下 */
+            /* 💥 优化：优先加载更小的 woff2，然后是 ttf */
+            src: url('awd_font.woff2') format('woff2'),
+                 url('awd_font.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
+            font-display: swap; /* 推荐：保证在字体加载时，文本可以先显示 */
         }
 
-        /* 将新字体应用到指定标题 */
+        /* 将新字体应用到指定标题 (新增 .header h1) */
         .left-content h2, /* 工作室主题曲, 我们的游戏, 游戏开发过程, 工作室成员, 用户评论区 */
-        .game-showcase h3 /* 卡皮巴拉环游世界 */
+        .game-showcase h3, /* 卡皮巴拉环游世界 */
+        .header h1 /* 💥 新增: AWaDo Studio 头部大标题 */
         {
             font-family: 'AWD-Title-Font', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             letter-spacing: 1.5px; /* 稍微增加间距以增强新字体效果 */
@@ -32,7 +36,7 @@
             overflow-x: hidden;
         }
 
-        /* ==================================== 头部横幅 ==================================== */
+        /* ==================================== 头部横幅 (AWaDo Studio 标题) ==================================== */
         .header {
             background-image: url('ct_room.jpg');
             background-size: cover;
@@ -45,7 +49,8 @@
             text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
         }
         .header h1 {
-            font-size: 3.5em;
+            /* 💥 字体大小增大一圈 (4.5em) */
+            font-size: 4.5em;
             margin: 0;
             letter-spacing: 2px;
         }
@@ -346,6 +351,11 @@
             /* 游戏展示区域居中修复 */
             .game-showcase p {
                 text-align: left; 
+            }
+
+            /* 移动端 .header h1 字体大小调整，以防过大 */
+            .header h1 {
+                font-size: 3.5em;
             }
         }
     </style>
