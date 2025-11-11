@@ -6,14 +6,17 @@
     <title>AWaDo Design</title>
     <link rel="icon" href="awado_icon.png" type="image/png">
     <style>
+        /* ==================================== 基础样式 ==================================== */
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 字体美化 */
+            background-color: #f0f2f5; /* 略微更柔和的背景色 */
             color: #333;
             scroll-behavior: smooth;
-            overflow-x: hidden; /* ✅ 禁止左右滚动 */
+            overflow-x: hidden;
         }
+
+        /* ==================================== 头部横幅 ==================================== */
         .header {
             background-image: url('ct_room.jpg');
             background-size: cover;
@@ -23,14 +26,17 @@
             align-items: center;
             justify-content: center;
             color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7); /* 阴影更深 */
         }
         .header h1 {
-            font-size: 3em;
+            font-size: 3.5em; /* 标题放大 */
             margin: 0;
+            letter-spacing: 2px;
         }
+
+        /* ==================================== 导航栏 ==================================== */
         .navbar {
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: #1e1e1e; /* 更深的黑色 */
             padding: 10px 20px;
             display: flex;
             align-items: center;
@@ -45,7 +51,7 @@
         }
         .navbar .studio-name {
             color: white;
-            font-size: 1.5em;
+            font-size: 1.6em;
             font-weight: bold;
             text-decoration: none;
             margin-right: auto;
@@ -53,23 +59,25 @@
             align-items: center;
         }
 
-        /* --- ✅ 搜索框美化版本 --- */
+        /* --- 搜索框样式 --- */
         .search-box {
-            margin-right: 20px;
+            margin-right: 25px; /* 调整间距 */
             display: flex;
             align-items: center;
         }
         .search-box input {
-            padding: 8px 10px;
-            border: 1px solid #ccc;
+            padding: 9px 12px; /* 调整高度 */
+            border: 1px solid #444;
             border-radius: 20px 0 0 20px;
             font-size: 1em;
             outline: none;
             width: 180px;
+            background-color: #2c2c2c;
+            color: #eee;
         }
         .search-box button {
-            padding: 8px 12px;
-            background-color: #007bff;
+            padding: 9px 15px; /* 调整高度 */
+            background-color: #4CAF50; /* 绿色按钮 */
             color: white;
             border: none;
             border-radius: 0 20px 20px 0;
@@ -78,95 +86,73 @@
             transition: background-color 0.3s;
         }
         .search-box button:hover {
-            background-color: #0056b3;
+            background-color: #43a047;
         }
-
-        /* 下拉菜单 */
-        .dropdown {
-            position: relative;
-        }
+        
+        /* --- 下拉菜单样式 --- */
+        .dropdown { position: relative; }
         .dropdown-toggle {
             color: white;
             font-size: 1.1em;
             cursor: pointer;
-            padding: 5px 10px;
-            background-color: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px; /* 调整大小 */
+            background-color: #333;
             border-radius: 4px;
             user-select: none;
             display: flex;
             align-items: center;
+            transition: background-color 0.2s;
         }
-        .dropdown-icon {
-            margin-left: 8px;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            transition: transform 0.3s ease;
-        }
-        .dropdown-icon.collapsed {
-            border-width: 5px 0 5px 8px;
-            border-color: transparent transparent transparent white;
-        }
-        .dropdown-icon.expanded {
-            border-width: 8px 5px 0 5px;
-            border-color: white transparent transparent transparent;
-        }
+        .dropdown-toggle:hover { background-color: #444; }
+        /* 箭头样式保持不变 */
+        .dropdown-icon { margin-left: 8px; width: 0; height: 0; border-style: solid; transition: transform 0.3s ease; }
+        .dropdown-icon.collapsed { border-width: 5px 0 5px 8px; border-color: transparent transparent transparent white; }
+        .dropdown-icon.expanded { border-width: 8px 5px 0 5px; border-color: white transparent transparent transparent; }
         .nav-links {
             display: none;
             position: absolute;
             top: 100%;
             right: 0;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: #2c2c2c; /* 与导航栏颜色相近 */
             min-width: 150px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             z-index: 10;
             padding: 5px 0;
-            border-radius: 0 0 4px 4px;
+            border-radius: 0 0 6px 6px;
         }
         .nav-links.show { display: block; }
         .nav-links a {
-            color: white;
-            padding: 12px 16px;
+            color: #f0f0f0;
+            padding: 10px 16px;
             display: block;
             text-align: left;
             text-decoration: none;
         }
-        .nav-links a:hover {
-            background-color: rgba(255,255,255,0.1);
-        }
+        .nav-links a:hover { background-color: #444; }
 
-        /* ✅ 主体左右分区 */
+
+        /* ==================================== 主体内容布局 ==================================== */
         .content-wrapper {
             display: flex;
-            gap: 20px;
-            max-width: 1280px;
-            margin: 20px auto;
+            gap: 25px; /* 增大间距 */
+            max-width: 1300px;
+            margin: 25px auto;
             padding: 0 20px;
         }
-        .left-content {
-            flex: 70%;
+        .left-content, .right-content {
             background: white;
-            padding: 20px;
-            border-radius: 8px;
+            padding: 30px; /* 增大内边距 */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* 增加柔和阴影 */
+            transition: box-shadow 0.3s;
         }
+        .left-content { flex: 70%; }
         .right-content {
             flex: 30%;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
             height: fit-content;
+            text-align: center;
         }
-
-        /* 内容样式保持不变 */
-        .game-showcase img { width:150px;height:150px;border-radius:15px;object-fit:cover;margin-bottom:20px; }
-        .highlight { background: yellow;font-weight: bold;}
-
-        /* ✅ 手机自适应 */
-        @media(max-width: 900px){
-            .content-wrapper { flex-direction: column; }
-            .left-content,.right-content{ flex:100%; }
-        }
-
+        .right-content h3 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; color: #3498db; }
         .right-content button {
             width: 100%;
             padding: 12px;
@@ -176,11 +162,102 @@
             border: none;
             border-radius: 6px;
             cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
         }
-        .right-content button:hover {
-            background: #c0392b;
+        .right-content button:hover { background: #c0392b; transform: translateY(-1px); }
+
+        /* ==================================== 内容区块样式 ==================================== */
+        /* 标题和锚点修复 */
+        .left-content h2 {
+            color: #007bff;
+            border-bottom: 2px solid #f0f2f5;
+            padding-bottom: 15px;
+            margin-top: 40px;
+            margin-bottom: 25px;
+            text-align: left; /* 标题居左 */
+            font-size: 1.8em;
+        }
+        .left-content > h2:first-child { margin-top: 0; }
+        /* 粘性导航栏遮挡修复 */
+        .left-content > h2:before {
+            content: ""; display: block; height: 90px; margin-top: -90px; visibility: hidden;
+        }
+        
+        .game-showcase {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+        .game-showcase:hover { border-color: #007bff; }
+        .game-showcase img { width: 180px; height: 180px; border-radius: 15px; object-fit: cover; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        .game-showcase h3 { color: #007bff; margin-bottom: 15px; font-size: 1.5em; }
+        
+        /* 音乐按钮美化 */
+        .button-container { text-align: center; margin-bottom: 40px; }
+        .music-button {
+            padding: 12px 30px;
+            font-size: 1.1em;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 30px; /* 胶囊按钮 */
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        .music-button:hover { background-color: #218838; transform: translateY(-1px); }
+        
+        /* 成员列表美化 */
+        .member-list {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start; /* 靠左对齐 */
+            gap: 10px;
+        }
+        .member-list li {
+            background-color: #ecf0f1; /* 浅灰色背景 */
+            padding: 8px 15px;
+            border-radius: 20px; /* 标签样式 */
+            font-weight: 600;
+            color: #2c3e50;
+            border: 1px solid #ccc;
+        }
+        
+        /* 评论区容器 */
+        .comments-container {
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+            margin-top: 30px;
         }
 
+        /* 搜索高亮样式 */
+        .highlight {
+            background-color: #ffeb3b; /* 亮黄色 */
+            color: black;
+            padding: 1px 3px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        /* 手机自适应 */
+        @media(max-width: 900px){
+            .content-wrapper { flex-direction: column; gap: 15px; }
+            .left-content,.right-content{ flex:100%; padding: 20px; }
+            .navbar { flex-wrap: wrap; justify-content: space-between; }
+            .search-box { order: 3; width: 100%; margin: 10px 0 0 0; }
+            .search-box input, .search-box button { border-radius: 20px; width: 48%; }
+            .search-box input { border-radius: 20px 0 0 20px; width: calc(50% - 15px); }
+            .search-box button { border-radius: 0 20px 20px 0; width: 50%; padding: 9px 0;}
+            .navbar .studio-name { font-size: 1.3em; }
+            .dropdown-toggle { font-size: 1em; }
+            .left-content h2 { font-size: 1.5em; text-align: center; }
+        }
     </style>
 </head>
 <body>
@@ -211,138 +288,191 @@
     <div class="header"><h1>AWaDo Studio</h1></div>
 
     <div class="content-wrapper">
-        <!---------------- 左侧内容 ---------------->
         <div class="left-content">
-        <h2 id="music">工作室主题曲</h2>
-        <div class="button-container">
-            <button class="music-button" id="playPauseButton">播放创作室主题曲</button>
-            <audio id="backgroundMusic" src="topic_bgm.mp3" loop></audio>
+            
+            <h2 id="music">工作室主题曲</h2>
+            <div class="button-container">
+                <button class="music-button" id="playPauseButton">播放创作室主题曲</button>
+                <audio id="backgroundMusic" src="topic_bgm.mp3" loop></audio>
+            </div>
+
+            <h2 id="game">我们的游戏</h2>
+            <div class="game-showcase">
+                <img src="cpbr_icon.jpg" alt="卡皮巴拉环游世界图标">
+                <h3>卡皮巴拉环游世界</h3>
+                <p>
+                    踏上一场与众不同的全球冒险之旅，扮演最佛系但也最具魅力的动物——卡皮巴拉！
+                    在这款轻松愉快的冒险游戏中，你将陪伴可爱的卡皮巴拉探索世界各地的奇妙风光。
+                    从热带雨林到冰雪覆盖的山脉，从繁华都市到宁静乡村，每到一个地方，
+                    卡皮巴拉都会用它独特的“佛系”方式与当地居民互动，解决各种有趣的小谜题。
+                    收集独特的纪念品，解锁新的服装，结交各种奇奇怪怪的朋友。
+                    《卡皮巴拉环游世界》不仅是一款游戏，更是一次心灵的放松之旅，让你在繁忙的生活中找到一片宁静与欢乐。
+                    快来加入卡皮巴拉，一起开启这场治愈系的环球旅行吧！
+                </p>
+            </div>
+
+            <h2 id="dev-process">游戏开发过程</h2>
+            <div class="development-process">
+                <img src="bg_ing.jpg" alt="游戏开发工作图">
+                <p>
+                    从最初的概念草图到最终的像素渲染，我们的团队倾注了无数心血来打造《卡皮巴拉环游世界》的每一个细节。
+                    我们从大自然的色彩中汲取灵感，精心设计每一帧动画，力求还原卡皮巴拉最真实、最可爱的形态。
+                    绘画过程中，我们反复推敲光影效果，尝试不同的笔触和纹理，以确保游戏画面既生动又富有艺术感。
+                    从场景搭建到角色建模，再到UI界面的设计，每一个环节都经过了严谨的讨论和修改，
+                    旨在为玩家提供最沉浸、最愉悦的游戏体验。
+                    这张工作图展示了我们对细节的执着，以及在创作过程中不断探索和完善的精神。
+                </p>
+            </div>
+
+            <h2 id="members">工作室成员</h2>
+            <ul class="member-list">
+                <li>Programmer : ZIJUN</li>
+                <li>Sponsor : YUHENG</li>
+                <li>Director : SANGYUAN</li>
+                <li>Language : QINGHUA</li>
+                <li>Character Design : LEONGYI</li>
+                <li>Art : SHUSHENG</li>
+            </ul>
+            
+            <h2 id="comments">用户评论区</h2>
+
+            <div class="comments-container">
+                <script src="https://utteranc.es/client.js"
+                        repo="AwadoDesign/AwadoDesign.github.io" 
+                        issue-term="pathname"
+                        theme="github-dark" 
+                        crossorigin="anonymous"
+                        async>
+                </script>
+            </div>
+
         </div>
 
-        <h2 id="game">我们的游戏</h2>
-        <div class="game-showcase">
-            <img src="cpbr_icon.jpg" alt="卡皮巴拉环游世界图标">
-            <h3>卡皮巴拉环游世界</h3>
-            <p>
-                踏上一场与众不同的全球冒险之旅，扮演最佛系但也最具魅力的动物——卡皮巴拉！
-                在这款轻松愉快的冒险游戏中，你将陪伴可爱的卡皮巴拉探索世界各地的奇妙风光。
-                从热带雨林到冰雪覆盖的山脉，从繁华都市到宁静乡村，每到一个地方，
-                卡皮巴拉都会用它独特的“佛系”方式与当地居民互动，解决各种有趣的小谜题。
-                收集独特的纪念品，解锁新的服装，结交各种奇奇怪怪的朋友。
-                《卡皮巴拉环游世界》不仅是一款游戏，更是一次心灵的放松之旅，让你在繁忙的生活中找到一片宁静与欢乐。
-                快来加入卡皮巴拉，一起开启这场治愈系的环球旅行吧！
-            </p>
-        </div>
-
-        <h2 id="dev-process">游戏开发过程</h2>
-        <div class="development-process">
-            <img src="bg_ing.jpg" alt="游戏开发工作图">
-            <p>
-                从最初的概念草图到最终的像素渲染，我们的团队倾注了无数心血来打造《卡皮巴拉环游世界》的每一个细节。
-                我们从大自然的色彩中汲取灵感，精心设计每一帧动画，力求还原卡皮巴拉最真实、最可爱的形态。
-                绘画过程中，我们反复推敲光影效果，尝试不同的笔触和纹理，以确保游戏画面既生动又富有艺术感。
-                从场景搭建到角色建模，再到UI界面的设计，每一个环节都经过了严谨的讨论和修改，
-                旨在为玩家提供最沉浸、最愉悦的游戏体验。
-                这张工作图展示了我们对细节的执着，以及在创作过程中不断探索和完善的精神。
-            </p>
-        </div>
-
-        <h2 id="members">工作室成员</h2>
-        <ul class="member-list">
-            <li>Programmer : ZIJUN</li>
-            <li>Sponsor : YUHENG</li>
-            <li>Director : SANGYUAN</li>
-            <li>Language : QINGHUA</li>
-            <li>Character Design : LEONGYI</li>
-            <li>Art : SHUSHENG</li>
-        </ul>
-        
-        <h2 id="comments" style="padding-top: 30px;">用户评论区 </h2>
-
-        <div class="comments-container">
-            <script src="https://utteranc.es/client.js"
-                    repo="AwadoDesign/AwadoDesign.github.io" 
-                    issue-term="pathname"
-                    theme="github-dark" 
-                    crossorigin="anonymous"
-                    async>
-            </script>
-        </div>
-
-        </div>
-
-        <!---------------- 右侧内容 ---------------->
         <div class="right-content">
-            <h3>反馈工作室</h3>
-            <p>点此加入 Telegram 联系我们：</p>
+            <h3>🤝 联系我们</h3>
+            <p style="margin-bottom: 20px;">点此加入 Telegram 联系我们，提供反馈或寻求支持：</p>
             <button onclick="window.location='https://t.me/zijun0108'">前往 Telegram</button>
         </div>
 
     </div>
 
 <script>
+    // 音乐播放控制 
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const playPauseButton = document.getElementById('playPauseButton');
+    let isPlaying = false;
+    
+    // 初始设置按钮文本
+    if (backgroundMusic.paused || backgroundMusic.ended) {
+        playPauseButton.textContent = '播放创作室主题曲';
+    } else {
+        playPauseButton.textContent = '暂停创作室主题曲';
+        isPlaying = true;
+    }
 
-// 下拉菜单控制
-        const dropdownToggle = document.getElementById('dropdownToggle');
-        const navLinks = document.getElementById('navLinks');
-        const dropdownIcon = document.getElementById('dropdownIcon');
-        const navLinksAnchor = navLinks.querySelectorAll('a');
+    playPauseButton.addEventListener('click', () => {
+        if (isPlaying) {
+            backgroundMusic.pause();
+            playPauseButton.textContent = '播放创作室主题曲';
+        } else {
+            backgroundMusic.play().catch(error => {
+                console.error("Audio play failed:", error);
+                alert("主题曲播放失败，可能需要用户交互授权。");
+                playPauseButton.textContent = '播放创作室主题曲'; 
+                isPlaying = false;
+            });
+            playPauseButton.textContent = '暂停创作室主题曲';
+        }
+        isPlaying = !isPlaying;
+    });
 
-        dropdownToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('show');
-            dropdownIcon.classList.toggle('collapsed');
-            dropdownIcon.classList.toggle('expanded');
+    // 下拉菜单控制 (保持原逻辑)
+    const dropdownToggle = document.getElementById('dropdownToggle');
+    const navLinks = document.getElementById('navLinks');
+    const dropdownIcon = document.getElementById('dropdownIcon');
+    const navLinksAnchor = navLinks.querySelectorAll('a');
+
+    dropdownToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('show');
+        dropdownIcon.classList.toggle('collapsed');
+        dropdownIcon.classList.toggle('expanded');
+    });
+
+    navLinksAnchor.forEach(link => {
+        link.addEventListener('click', () => {
+            // 关闭菜单
+            navLinks.classList.remove('show');
+            dropdownIcon.classList.remove('expanded');
+            dropdownIcon.classList.add('collapsed');
         });
+    });
 
-        navLinksAnchor.forEach(link => {
-            link.addEventListener('click', () => {
-                // 关闭菜单
+    document.addEventListener('click', (event) => {
+        if (!dropdownToggle.contains(event.target) && !navLinks.contains(event.target)) {
+            if (navLinks.classList.contains('show')) {
                 navLinks.classList.remove('show');
                 dropdownIcon.classList.remove('expanded');
                 dropdownIcon.classList.add('collapsed');
-            });
-        });
-
-        document.addEventListener('click', (event) => {
-            // 检查点击是否发生在菜单外部
-            if (!dropdownToggle.contains(event.target) && !navLinks.contains(event.target)) {
-                if (navLinks.classList.contains('show')) {
-                    navLinks.classList.remove('show');
-                    dropdownIcon.classList.remove('expanded');
-                    dropdownIcon.classList.add('collapsed');
-                }
             }
-        });
-/* 播放按钮 */
-const bgm=document.getElementById("backgroundMusic");
-const btn=document.getElementById("playPauseButton");
-let play=false;
-btn.onclick=()=>{
-    if(play){ bgm.pause(); btn.textContent="播放创作室主题曲"; }
-    else{ bgm.play(); btn.textContent="暂停创作室主题曲"; }
-    play=!play;
-};
-
-/* 搜索功能 */
-function clearHighlights(){
-    document.querySelectorAll(".highlight").forEach(el=>{ el.outerHTML=el.innerText; });
-}
-function searchContent(){
-    clearHighlights();
-    const q=document.getElementById("searchInput").value.trim();
-    if(!q){ alert("请输入关键词");return; }
-    const reg=new RegExp(q,"gi");let found=false;
-    document.querySelectorAll("p,h2,h3,li").forEach(el=>{
-        if(reg.test(el.innerText)){
-            found=true;
-            el.innerHTML=el.innerHTML.replace(reg, m=>`<span class="highlight">${m}</span>`);
-            el.scrollIntoView({behavior:"smooth",block:"center"});
         }
     });
-    if(!found){ alert("未找到内容"); }
-    document.getElementById("searchInput").value="";
-}
-document.getElementById("searchButton").onclick=searchContent;
+
+    /* 搜索功能 - 内容高亮及滚动 */
+    function clearHighlights(){
+        // 使用一个循环安全地替换高亮标签
+        document.querySelectorAll(".highlight").forEach(el=>{ 
+            el.outerHTML = el.textContent; // 使用 textContent 以确保内容不会丢失
+        });
+    }
+
+    function searchContent(){
+        clearHighlights();
+        const query = document.getElementById("searchInput").value.trim();
+        if(!query){ 
+            alert("请输入关键词");
+            return; 
+        }
+
+        // 使用转义的正则表达式，以支持特殊字符搜索
+        const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const reg = new RegExp(`(${escapedQuery})`, "gi");
+        let found = false;
+        let firstMatchElement = null;
+
+        // 遍历左侧内容区域的所有相关元素
+        document.querySelectorAll(".left-content p, .left-content h2, .left-content h3, .left-content li").forEach(el=>{
+            // 确保只替换文本节点中的内容，避免破坏HTML结构 (如<img>)
+            const originalHTML = el.innerHTML;
+            const newHTML = el.textContent.replace(reg, m => `<span class="highlight">${m}</span>`);
+            
+            if (newHTML !== el.textContent) {
+                // 如果找到匹配项，则替换并标记为已找到
+                el.innerHTML = newHTML;
+                found = true;
+                if (!firstMatchElement) {
+                    firstMatchElement = el;
+                }
+            } else {
+                // 还原为原始HTML，防止替换失败导致内容被清空
+                el.innerHTML = originalHTML;
+            }
+        });
+
+        if(found && firstMatchElement){ 
+            // 滚动到第一个匹配的元素
+            firstMatchElement.scrollIntoView({behavior:"smooth", block:"center"});
+        } else if (!found) { 
+            alert("未找到内容"); 
+        }
+        document.getElementById("searchInput").value = "";
+    }
+    
+    document.getElementById("searchButton").onclick = searchContent;
+    document.getElementById("searchInput").addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            searchContent();
+        }
+    });
 </script>
 
 </body>
