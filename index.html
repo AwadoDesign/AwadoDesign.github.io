@@ -281,6 +281,38 @@
     </div>
 
 <script>
+
+// 下拉菜单控制
+        const dropdownToggle = document.getElementById('dropdownToggle');
+        const navLinks = document.getElementById('navLinks');
+        const dropdownIcon = document.getElementById('dropdownIcon');
+        const navLinksAnchor = navLinks.querySelectorAll('a');
+
+        dropdownToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+            dropdownIcon.classList.toggle('collapsed');
+            dropdownIcon.classList.toggle('expanded');
+        });
+
+        navLinksAnchor.forEach(link => {
+            link.addEventListener('click', () => {
+                // 关闭菜单
+                navLinks.classList.remove('show');
+                dropdownIcon.classList.remove('expanded');
+                dropdownIcon.classList.add('collapsed');
+            });
+        });
+
+        document.addEventListener('click', (event) => {
+            // 检查点击是否发生在菜单外部
+            if (!dropdownToggle.contains(event.target) && !navLinks.contains(event.target)) {
+                if (navLinks.classList.contains('show')) {
+                    navLinks.classList.remove('show');
+                    dropdownIcon.classList.remove('expanded');
+                    dropdownIcon.classList.add('collapsed');
+                }
+            }
+        });
 /* 播放按钮 */
 const bgm=document.getElementById("backgroundMusic");
 const btn=document.getElementById("playPauseButton");
