@@ -153,23 +153,40 @@
         }
         .right-content h3 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; color: #3498db; }
         
-        /* 侧边栏按钮美化 (前往 Telegram) */
-        .right-content button {
+        /* 侧边栏按钮基础样式 */
+        .right-content .contact-button {
             width: 100%;
             padding: 12px;
             font-size: 1.1em;
-            background: #3498db;
-            color: white;
             border: none;
             border-radius: 30px;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
+            margin-bottom: 15px; /* 添加按钮间距 */
+        }
+        
+        /* Telegram 按钮样式 */
+        .right-content .telegram-button {
+            background: #3498db;
+            color: white;
             box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
         }
-        .right-content button:hover { 
+        .right-content .telegram-button:hover { 
             background: #2980b9; 
             transform: translateY(-2px); 
             box-shadow: 0 6px 10px rgba(52, 152, 219, 0.4);
+        }
+
+        /* 🔥 新增 AI Chat 按钮样式 (使用不同的颜色和阴影) */
+        .right-content .ai-chat-button {
+            background: #e74c3c; /* 红色系，醒目 */
+            color: white;
+            box-shadow: 0 4px 6px rgba(231, 76, 60, 0.3);
+        }
+        .right-content .ai-chat-button:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(231, 76, 60, 0.4);
         }
 
         /* ==================================== 内容区块样式 ==================================== */
@@ -206,11 +223,11 @@
         .game-showcase img { width: 180px; height: 180px; border-radius: 15px; object-fit: cover; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
         .game-showcase h3 { color: #3498db; margin-bottom: 15px; font-size: 1.5em; }
         
-        /* 🔥 关键修复：限制 bg_ing.jpg 的尺寸 */
+        /* 关键修复：限制 bg_ing.jpg 的尺寸 */
         .development-process img {
-            max-width: 100%; /* 图片最大宽度为其父容器的 100% */
-            height: auto;    /* 保持图片比例 */
-            display: block;  /* 确保块级显示，方便控制 */
+            max-width: 100%; 
+            height: auto;    
+            display: block;  
             border-radius: 8px;
             margin-bottom: 20px;
         }
@@ -408,7 +425,11 @@
         <div class="right-content">
             <h3>🤝 联系我们</h3>
             <p style="margin-bottom: 20px;">点此加入 Telegram 联系我们，提供反馈或寻求支持：</p>
-            <button onclick="window.location='https://t.me/zijun0108'">前往 Telegram</button>
+            <button onclick="window.location='https://t.me/zijun0108'" class="contact-button telegram-button">前往 Telegram</button>
+            
+            <button onclick="window.location='chat.html'" class="contact-button ai-chat-button">
+                🤖 与 AI 聊天
+            </button>
         </div>
 
     </div>
@@ -502,17 +523,14 @@
         document.querySelectorAll(".left-content p, .left-content h2, .left-content h3, .left-content li").forEach(el=>{
             let originalText = el.textContent; 
             
-            // 使用临时元素进行安全的文本替换
             let tempDiv = document.createElement('div');
             tempDiv.innerHTML = el.innerHTML;
 
-            // 递归遍历并只替换文本节点
             function processNode(node) {
-                if (node.nodeType === 3) { // 文本节点
+                if (node.nodeType === 3) { 
                     const newText = node.nodeValue.replace(reg, m => `<span class="highlight">${m}</span>`);
                     if (newText !== node.nodeValue) {
                         found = true;
-                        // 创建一个临时元素来安全地解析新的 HTML 片段
                         const tempFrag = document.createElement('div');
                         tempFrag.innerHTML = newText;
                         while (tempFrag.firstChild) {
@@ -527,7 +545,6 @@
 
             processNode(el);
 
-            // 仅在首次找到匹配项时设置滚动目标
             if (found && !firstMatchElement && el.textContent.includes(originalText.replace(reg, ''))) {
                  firstMatchElement = el;
             }
