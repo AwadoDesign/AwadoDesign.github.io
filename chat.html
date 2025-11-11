@@ -185,16 +185,21 @@
                 grid-template-rows:72px 1fr;
                 height: 720px; 
             }
-            header{ padding: 14px 18px; height: 72px; }
+            header{ 
+                padding: 14px 18px; 
+                height: 72px; 
+                /* 确保头部底部有分隔线 */
+                border-bottom:1px solid rgba(255,255,255,.1); 
+            }
             header .logo{ width:40px; height:40px; }
             header h1{ font-size:18px; }
             .small{display: block;} 
             
-            /* 关键修改 1: pane 移除顶部填充，仅保留左右和底部填充 */
+            /* 关键修改 1: pane 移除所有填充，使其紧贴 app 边缘 */
             .pane{
                 flex-direction: row; 
                 gap:0; 
-                padding: 0 18px 12px 18px; /* 顶部0，左右18px，底部12px */
+                padding: 0; /* 移除所有填充，实现聊天框紧贴 header */
             }
             .sidebar{
                 display: none; 
@@ -203,15 +208,16 @@
                 flex:1; 
                 background: var(--chat-bg); 
                 position: static; 
-                box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
-                border-radius: 10px; 
+                box-shadow: none; /* 移除聊天框本身的阴影 */
+                border-radius: 0 0 12px 12px; /* 聊天框只保留底部圆角，与 app 容器的底部圆角对齐 */
                 padding: 0; 
                 box-sizing: border-box; 
             }
             
-            /* 关键修改 2: meta 增加顶部填充，并统一左右填充 */
+            /* 关键修改 2: meta 增加统一填充 */
             .meta {
-                 padding: 12px 18px 8px 18px; /* 顶部增加填充 */
+                 padding: 12px 18px 8px 18px; 
+                 border-bottom: 1px dashed rgba(255,255,255,.05); /* 强化分隔线 */
             }
             
             /* 关键修改 3: messages 统一填充 */
@@ -221,14 +227,15 @@
                 gap:15px;
             }
 
-            /* 关键修改 4: footer 调整垂直对齐 */
+            /* 关键修改 4: footer 垂直居中，并增加底部填充 */
             .chat footer {
                 position: static;
                 border-top: 1px solid rgba(255,255,255,.05);
-                padding:12px 18px; 
+                padding:18px; /* 增加整体填充，以实现居中效果 */
                 min-height: initial;
-                /* 核心修复：垂直居中 */
-                align-items: center; 
+                align-items: center; /* 垂直居中 */
+                background-color: var(--awado-card); /* 使底部区域与 header 颜色一致，形成分层 */
+                border-radius: 0 0 12px 12px; /* 确保底部圆角 */
             }
             
             /* 调整聊天气泡 */
@@ -255,7 +262,6 @@
             }
             .footer-btns{ 
                 gap:8px; 
-                /* 确保按钮组居中对齐 */
                 align-self: center; 
             }
             .btn{ padding:10px 14px; font-size: initial; }
