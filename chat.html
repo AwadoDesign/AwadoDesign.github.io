@@ -9,7 +9,7 @@
         /* AWaDo 品牌配色与基础设置 */
         :root{
             --awado-bg: #0f1724; 
-            --awado-card: #1e1e1e; /* 用于 app 容器和桌面端 sidebar */
+            --awado-card: #1e1e1e; /* 用于 app 容器 */
             --awado-text: #e6eef6; 
             --awado-muted: #9aa4b2; 
             --awado-green: #2ecc71; 
@@ -39,7 +39,7 @@
             width: 100%; 
             max-width: none; 
             height: var(--app-height); 
-            background:var(--awado-card); /* 桌面端作为最外层背景 */
+            background:var(--awado-card); 
             border-radius:0; 
             box-shadow:none; 
             display:grid;
@@ -71,18 +71,20 @@
         .pane{
             display:flex;
             flex-direction: column;
+            /* 关键修改 1: 移除 gap/padding，让 chat 撑满 */
             gap:0;
             padding:0;
             grid-row: 2 / 3;
             overflow: hidden; 
         }
         .sidebar{
-            display: none; /* 手机端始终隐藏 */
+            /* 关键修改 2: 侧边栏在所有情况下都隐藏 */
+            display: none; 
         }
         
         .chat{
             flex:1;
-            background:var(--chat-bg); /* 手机端的聊天背景 */
+            background:var(--chat-bg); 
             padding:0; 
             border-radius:0; 
             display:flex;
@@ -170,7 +172,7 @@
             flex-shrink: 0;
         }
 
-        /* 3. 桌面端样式 (Media Query 覆盖手机默认样式) */
+        /* 3. 桌面端样式 (Media Query 覆盖) */
         @media (min-width: 600px) {
             body {
                 align-items: center; 
@@ -189,49 +191,42 @@
             header .logo{ width:40px; height:40px; }
             header h1{ font-size:18px; }
             .small{display: block;} 
+            
+            /* 关键修改 3: 桌面端 pane 恢复默认布局，chat 占满整个空间 */
             .pane{
                 flex-direction: row; 
-                gap:18px;
-                padding:18px; /* 间距在这里生效 */
+                gap:0; /* 移除间隙 */
+                padding: 0; /* 移除填充 */
             }
-            /* 关键修复 1: 侧边栏样式调整 */
             .sidebar{
-                display: block; 
-                width:240px;
-                align-self: stretch;
-                padding: 15px;
-                background: var(--awado-bg); /* 添加背景色，使其与 app 容器的 awado-card 区分 */
-                border-radius: 10px;
-                box-shadow: inset 0 0 5px rgba(0,0,0,0.2); /* 增加内阴影以区分 */
-                flex-shrink: 0;
+                display: none; /* 明确隐藏 */
             }
-            /* 关键修复 2: 聊天区样式调整 */
             .chat{
-                border-radius:10px;
-                position: static; 
-                background: var(--chat-bg); /* 确保背景色正确 */
-                box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* 增加阴影以突出 */
+                flex:1; /* 确保 chat 填满剩余空间 */
+                border-radius: 0 0 10px 10px; /* 底部圆角保留，顶部直角 */
+                background: var(--chat-bg); 
+                position: static; /* 恢复正常流布局 */
+                box-shadow: none; /* 移除上一步为了侧边栏添加的阴影 */
+                /* 确保 chat 左右两边有填充 */
+                padding: 18px; 
+                box-sizing: border-box; 
             }
             .messages{
+                /* 调整 messages 区域以适应新的 chat 填充 */
                 flex: 1; 
-                padding:15px 10px;
+                padding: 0; /* 聊天气泡本身没有填充，由 chat 的 padding 决定 */
                 padding-bottom: 15px; 
                 gap:15px;
             }
-            .messages::-webkit-scrollbar {width: 8px;} 
-            .messages::-webkit-scrollbar-thumb {background-color: rgba(255, 255, 255, 0.15);}
-            .msg{
-                max-width:85%;
-                padding:12px 15px;
-                font-size: 15px;
-            }
-            footer{
-                position: static; 
-                padding:12px 15px;
-                gap: 10px;
+             /* 调整 footer 在桌面端的位置，使其位于 chat 底部 */
+            .chat footer {
+                position: static;
+                border-top: 1px solid rgba(255,255,255,.05);
+                padding:12px 0; /* 垂直填充，水平填充由 chat padding 决定 */
                 min-height: initial; 
             }
-            textarea{
+            /* 调整输入框和按钮的相对位置 */
+            .chat textarea {
                 min-height:56px;
                 max-height:120px;
                 resize: vertical; 
@@ -240,6 +235,19 @@
             }
             .footer-btns{ gap:8px; }
             .btn{ padding:10px 14px; font-size: initial; }
+
+            /* 调整聊天气泡，使其在 chat 内部居中 */
+            .msg {
+                margin-left: 0;
+                margin-right: 0;
+            }
+            .msg.user {
+                margin-left: auto;
+            }
+            .msg.ai {
+                margin-right: auto;
+            }
+            
         }
     </style>
 </head>
@@ -257,22 +265,7 @@
 
         <div class="pane">
             <aside class="sidebar">
-                <div class="note">
-                    <p style="color:var(--awado-red); font-weight: 600; margin-top: 0;">工作原理:</p>
-                    <ul style="padding-left: 20px; margin-top: 0;">
-                        <li>本系统在浏览器端运行，不依赖任何外部 API。</li>
-                        <li>机器人通过**关键词匹配**来回复预设的答案。</li>
-                        <li>如果您询问超出预设规则的问题，它将回复默认信息。</li>
-                    </ul>
-                    <p style="color:var(--awado-green); font-weight: 600;">您可以尝试问：</p>
-                    <ul style="padding-left: 20px;">
-                        <li>卡皮巴拉（游戏名）</li>
-                        <li>成员列表</li>
-                        <li>主题曲</li>
-                        <li>你好 / 谢谢</li>
-                    </ul>
-                </div>
-            </aside>
+                </aside>
 
             <section class="chat">
                 <div class="meta">会话历史 — 本系统不会保存您的聊天记录。</div>
@@ -428,6 +421,7 @@
                 const footerHeight = footerEl.offsetHeight; 
                 document.documentElement.style.setProperty('--footer-height', `${footerHeight + 15}px`); 
             } else {
+                // 桌面端 footer 已经是静态的，不需要额外的 padding-bottom，只需要底部填充
                 document.documentElement.style.setProperty('--footer-height', `15px`);
             }
             messagesEl.scrollTop = messagesEl.scrollHeight; 
