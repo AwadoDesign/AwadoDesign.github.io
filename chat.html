@@ -32,8 +32,8 @@
             color:var(--awado-text);
             display:flex;
             justify-content:center;
-            /* 关键修改：禁用 body 上的滚动条 */
-            overflow: hidden; 
+            align-items: center; /* 确保 app 在 body 中垂直居中 */
+            overflow: hidden; /* 禁用 body 上的滚动条 */
         }
 
         /* 2. APP 容器：在手机端全屏，桌面端固定尺寸 */
@@ -46,7 +46,9 @@
             box-shadow:none; 
             display:grid;
             grid-template-rows:60px 1fr; 
-            overflow:hidden; /* 确保 app 容器内的内容不会导致 body 滚动 */
+            overflow:hidden; 
+            /* 确保缩放前位于中心 */
+            transform-origin: center center; 
         }
         
         /* ==================== 头部（Header） ==================== */
@@ -90,7 +92,7 @@
             display:flex;
             flex-direction:column;
             position: relative; 
-            overflow: hidden; /* 确保 chat 本身不滚动 */
+            overflow: hidden; 
         }
         
         /* ==================== 消息区（Messages）- 核心滚动区域 ==================== */
@@ -175,31 +177,30 @@
 
         /* 3. 桌面端样式 (Media Query 覆盖) */
         @media (min-width: 600px) {
-            body {
-                align-items: center; 
-                /* 移除 padding，使内容更贴合视口 */
-                padding: 0; 
-            }
+            
+            /* 关键修改 1: 缩小整个 app 容器 10% */
             .app{
                 width:900px;
                 max-width:95%;
-                /* 确保 app 高度固定，不溢出 body */
-                height:720px; 
+                height:720px;
                 border-radius:12px;
                 box-shadow:0 8px 30px rgba(0,0,0,.5);
-                /* 修复了 header height 的 grid-template-rows */
                 grid-template-rows: 72px 1fr; 
+                height: 720px; 
+                
+                /* 应用缩放 */
+                transform: scale(0.9);
             }
+            
             header{ 
                 padding: 14px 18px; 
-                height: 72px; /* 匹配 grid-template-rows 中的高度 */
+                height: 72px; 
                 border-bottom:1px solid rgba(255,255,255,.1); 
             }
             header .logo{ width:40px; height:40px; }
             header h1{ font-size:18px; }
             .small{display: block;} 
             
-            /* 关键修改 1: pane 移除所有填充，使其紧贴 app 边缘 */
             .pane{
                 flex-direction: row; 
                 gap:0; 
@@ -215,23 +216,19 @@
                 box-sizing: border-box; 
             }
             
-            /* 关键修改 2: meta 增加统一填充 */
             .meta {
                  padding: 12px 18px 8px 18px; 
                  border-bottom: 1px dashed rgba(255,255,255,.05); 
             }
             
-            /* 关键修改 3: messages 统一填充，保持滚动功能 */
             .messages{
                 flex: 1; 
                 padding: 15px 18px; 
                 gap:15px;
-                overflow-y: auto; /* 消息过多时，messages 区域滚动 */
+                overflow-y: auto; 
             }
-            /* 桌面端隐藏滚动条，保持内容滚动 */
             .messages::-webkit-scrollbar {width: 0; display: none;} 
 
-            /* 关键修改 4: footer 垂直居中，并增加底部填充 */
             .chat footer {
                 position: static;
                 border-top: 1px solid rgba(255,255,255,.05);
@@ -246,14 +243,6 @@
             .msg {
                 max-width: 85%; 
                 padding:12px 15px;
-            }
-            .msg.user {
-                margin-left: auto;
-                margin-right: 0;
-            }
-            .msg.ai {
-                margin-right: auto;
-                margin-left: 0;
             }
             
             /* 调整输入框和按钮的相对位置 */
