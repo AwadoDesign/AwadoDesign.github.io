@@ -8,39 +8,42 @@
     <style>
         /* AWaDo 品牌配色与基础设置 */
         :root{
-            --awado-bg: #0f1724; /* 深蓝背景 */
-            --awado-card: #1e1e1e; /* 导航栏/卡片深色 */
-            --awado-text: #e6eef6; /* 主文本颜色 */
-            --awado-muted: #9aa4b2; /* 次要文本颜色 */
-            --awado-green: #2ecc71; /* 强调色 1: 绿色 (主题曲按钮色) */
-            --awado-red: #e74c3c; /* 强调色 2: 红色 (搜索/标题色) */
-            --awado-blue: #3498db; /* 强调色 3: 蓝色 (TG按钮色) */
+            --awado-bg: #0f1724; 
+            --awado-card: #1e1e1e; 
+            --awado-text: #e6eef6; 
+            --awado-muted: #9aa4b2; 
+            --awado-green: #2ecc71; 
+            --awado-red: #e74c3c; 
+            --awado-blue: #3498db; 
+            --footer-height: 80px; /* 预估底部输入框高度 */
         }
-        /* 1. 基础布局：手机端默认全高全宽 */
+        
+        /* 1. 核心修复：移动端使用 vh 确保全屏，移除所有默认边距 */
         html,body{
-            height:100%;
+            height: 100vh; /* 确保占据视口全高 */
             margin:0;
+            padding: 0;
             font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 0; 
+            overflow: hidden; /* 防止整个页面滚动 */
         }
         body{
             background:var(--awado-bg);
             color:var(--awado-text);
             display:flex;
-            align-items:flex-start; /* 手机端靠上对齐 */
             justify-content:center;
         }
+
+        /* 2. APP 容器：在手机端全屏，桌面端固定尺寸 */
         .app{
-            width: 100%; /* 手机端宽度占满 */
-            max-width: none; /* 移除最大宽度限制 */
-            height: 100%; /* 手机端高度占满 */
+            width: 100%; 
+            max-width: none; 
+            height: 100vh; 
             background:var(--awado-card);
-            border-radius:0; /* 移除圆角 */
-            box-shadow:none; /* 移除阴影 */
+            border-radius:0; 
+            box-shadow:none; 
             display:grid;
             grid-template-rows:60px 1fr; /* 头部高度减小到 60px */
             overflow:hidden;
-            margin: 0;
         }
         
         /* ==================== 头部（Header） ==================== */
@@ -48,19 +51,17 @@
             display:flex;
             gap:10px;
             align-items:center;
-            padding:10px 15px; /* 减小内边距 */
+            padding:10px 15px; 
             border-bottom:1px solid rgba(255,255,255,.05);
             background-color: #2c2c2c; 
         }
         header .logo{
-            width:35px; /* 减小 logo 大小 */
+            width:35px; 
             height:35px;
             border-radius:6px; 
             object-fit: contain;
         }
-        header h1{font-size:16px;margin:0;color:var(--awado-red);font-weight:600;} /* 减小标题字体 */
-        
-        /* 移除 API 相关的控制 */
+        header h1{font-size:16px;margin:0;color:var(--awado-red);font-weight:600;} 
         .controls{margin-left:auto;} 
         .controls select { display: none; }
         .small{display: none;} /* 手机端隐藏次要信息 */
@@ -68,61 +69,55 @@
         /* ==================== 主面板（Pane） ==================== */
         .pane{
             display:flex;
-            flex-direction: column; /* 手机端垂直堆叠 */
+            flex-direction: column;
             gap:0;
             padding:0;
             grid-row: 2 / 3;
             overflow: hidden; 
         }
-        /* 手机端移除侧边栏并隐藏 */
         .sidebar{
             display: none; 
         }
         
+        /* CHAT 区域：占据 pane 剩余空间，并用于相对定位 footer */
         .chat{
             flex:1;
             background:#0b1220; 
             padding:0; 
-            border-radius:0; /* 移除圆角 */
+            border-radius:0; 
             display:flex;
             flex-direction:column;
+            position: relative; /* 关键：用于绝对定位 footer */
             overflow: hidden; 
         }
         
         /* ==================== 消息区（Messages）- 核心滚动区域 ==================== */
         .messages{
-            flex:1; 
+            /* 关键：使用 padding-bottom 预留出 footer 的空间 */
+            padding:15px; 
+            padding-bottom: var(--footer-height); /* 预留底部输入框空间 */
             overflow-y:auto; 
-            padding:15px; /* 保持适当内边距 */
+            -webkit-overflow-scrolling: touch; /* 提高iOS滚动流畅度 */
+            flex:1; /* 占据剩余空间 */
             display:flex;
             flex-direction:column;
-            gap:12px; /* 略微减小间距 */
+            gap:12px;
         }
         .messages::-webkit-scrollbar {width: 0;} /* 手机端隐藏滚动条 */
         .messages::-webkit-scrollbar-thumb {background-color: transparent;}
         
         .msg{
-            max-width:90%; /* 增加消息气泡宽度 */
-            padding:10px 12px; /* 减小消息气泡内边距 */
+            max-width:90%; 
+            padding:10px 12px; 
             border-radius:10px; 
             line-height:1.4; 
-            font-size: 14px; /* 减小字体 */
+            font-size: 14px; 
             box-shadow: 0 1px 3px rgba(0,0,0,0.1)
         }
         
         /* 消息样式不变 */
-        .msg.user{
-            margin-left:auto;
-            background:linear-gradient(135deg,var(--awado-blue),#2980b9);
-            color:white;
-            border:1px solid rgba(52,152,219,.15);
-        }
-        .msg.ai{
-            margin-right:auto;
-            background:linear-gradient(135deg,#1f3d33,#0b2d23);
-            color:var(--awado-text);
-            border:1px solid rgba(46,204,113,.15);
-        }
+        .msg.user{ margin-left:auto; background:linear-gradient(135deg,var(--awado-blue),#2980b9); color:white; border:1px solid rgba(52,152,219,.15); }
+        .msg.ai{ margin-right:auto; background:linear-gradient(135deg,#1f3d33,#0b2d23); color:var(--awado-text); border:1px solid rgba(46,204,113,.15); }
         .msg > div:first-child{font-weight: bold; margin-bottom: 3px; font-size: 12px;}
         .msg.user > div:first-child{color: rgba(255,255,255,0.8);}
         .msg.ai > div:first-child{color: var(--awado-green);}
@@ -135,62 +130,55 @@
             text-align: center;
         }
         
-        /* ==================== 底部（Footer） ==================== */
+        /* ==================== 底部（Footer） - 绝对定位固定底部 ==================== */
         footer{
+            position: absolute; /* 关键：固定在 chat 容器底部 */
+            bottom: 0;
+            left: 0;
+            right: 0;
             display:flex;
-            gap:8px; /* 减小间距 */
-            padding:10px 15px; /* 减小内边距 */
+            gap:8px;
+            padding:10px 15px;
             border-top:1px solid rgba(255,255,255,.05);
-            align-items:flex-end; /* 底部对齐 */
+            align-items:flex-end;
             background-color: #2c2c2c;
+            /* 关键：通过 JS 动态调整此高度，但此处先保持最小高度 */
+            min-height: var(--footer-height); 
+            box-sizing: border-box; 
             flex-shrink: 0;
         }
         textarea{
             flex:1;
-            min-height:48px; /* 减小最小高度 */
-            max-height:100px; /* 减小最大高度 */
-            resize: none; /* 手机端禁止拖拽改变输入框大小 */
+            min-height:48px;
+            max-height:100px;
+            resize: none; 
             padding:10px;
             border-radius:8px;
             background:#333; 
             border:1px solid rgba(255,255,255,.1);
             color:var(--awado-text);
             font-size:14px;
-            transition: border-color 0.2s;
         }
         textarea:focus { border-color: var(--awado-green); outline: none; }
         
         .btn{
-            padding:8px 12px; /* 减小按钮尺寸 */
+            padding:8px 12px;
             border-radius:8px;
             font-weight:600;
-            cursor:pointer;
-            box-shadow: 0 2px 5px rgba(46, 204, 113, 0.3);
-            transition: opacity 0.2s, transform 0.1s;
         }
-        .btn:hover { opacity: 0.9; }
-        .btn:active { transform: translateY(1px); }
-
-        .btn.secondary{
-            background:#444;
-            border:1px solid #555;
-            color:var(--awado-muted);
-            box-shadow: none;
-        }
-        .btn.secondary:hover { background: #555; opacity: 1; }
-        
         .footer-btns{
             display:flex;
             flex-direction:column;
-            gap:6px; /* 减小按钮间距 */
+            gap:6px;
             flex-shrink: 0;
         }
 
-        /* 2. 桌面端样式 (使用 media query 覆盖手机默认样式) */
+        /* 3. 桌面端样式 (Media Query 覆盖手机默认样式) */
         @media (min-width: 600px) {
             body {
-                align-items: center; /* 恢复居中对齐 */
+                align-items: center; 
                 padding: 24px;
+                overflow: auto; /* 桌面端允许 body 滚动，但 app 不滚动 */
             }
             .app{
                 width:900px;
@@ -200,24 +188,17 @@
                 box-shadow:0 8px 30px rgba(0,0,0,.5);
                 grid-template-rows:72px 1fr;
             }
-            header{
-                padding: 14px 18px;
-            }
-            header .logo{
-                width:40px;
-                height:40px;
-            }
-            header h1{
-                font-size:18px;
-            }
-            .small{display: block;} /* 恢复桌面端次要信息显示 */
+            header{ padding: 14px 18px; height: 72px; }
+            header .logo{ width:40px; height:40px; }
+            header h1{ font-size:18px; }
+            .small{display: block;} 
             .pane{
-                flex-direction: row; /* 恢复水平布局 */
+                flex-direction: row; 
                 gap:18px;
                 padding:18px;
             }
             .sidebar{
-                display: block; /* 恢复侧边栏显示 */
+                display: block; 
                 width:240px;
                 align-self: stretch;
                 padding: 15px;
@@ -225,37 +206,36 @@
             }
             .chat{
                 border-radius:10px;
+                position: static; /* 恢复静态定位 */
             }
             .messages{
+                flex: 1; /* 恢复 flex 布局的 flex: 1 */
                 padding:15px 10px;
+                padding-bottom: 15px; /* 移除底部填充 */
                 gap:15px;
             }
-            .messages::-webkit-scrollbar {width: 8px;} /* 恢复滚动条 */
+            .messages::-webkit-scrollbar {width: 8px;} 
             .messages::-webkit-scrollbar-thumb {background-color: rgba(255, 255, 255, 0.15);}
             .msg{
                 max-width:85%;
                 padding:12px 15px;
                 font-size: 15px;
             }
-            .msg > div:first-child{font-size: 13px;}
             footer{
+                position: static; /* 恢复静态定位 */
                 padding:12px 15px;
                 gap: 10px;
+                min-height: initial; 
             }
             textarea{
                 min-height:56px;
                 max-height:120px;
-                resize: vertical; /* 恢复桌面端可垂直拖拽 */
+                resize: vertical; 
                 padding: 12px;
                 font-size: 15px;
             }
-            .footer-btns{
-                gap:8px;
-            }
-            .btn{
-                padding:10px 14px;
-                font-size: initial;
-            }
+            .footer-btns{ gap:8px; }
+            .btn{ padding:10px 14px; font-size: initial; }
         }
     </style>
 </head>
@@ -302,7 +282,7 @@
                 </div>
 
                 <footer>
-                    <textarea id="input" placeholder="输入您的问题（Shift+Enter 换行，手机端 Enter 发送）"></textarea>
+                    <textarea id="input" placeholder="输入您的问题（Enter 发送）"></textarea>
                     <div class="footer-btns">
                         <button id="sendBtn" class="btn">发送</button>
                         <button id="clearBtn" class="btn secondary">清空</button>
@@ -317,9 +297,10 @@
         const inputEl = document.getElementById('input');
         const sendBtn = document.getElementById('sendBtn');
         const clearBtn = document.getElementById('clearBtn');
+        const footerEl = document.querySelector('footer');
 
         // ===============================================
-        // 核心规则：关键词匹配 (使用您提供的规则)
+        // 核心规则：关键词匹配
         // ===============================================
         const rules = [
             {
@@ -363,11 +344,10 @@
         function addMessage(role, text){
             const div = document.createElement('div');
             div.className = 'msg ' + (role==='user'?'user':'ai');
-            // 机器人名称统一为“AWaDo 机器人”
             div.innerHTML = '<div style="font-size:13px; margin-bottom:6px">'+(role==='user'? '你':'AWaDo 机器人')+'</div>' +
                             '<div>' + escapeHtml(text).replace(/\n/g,'<br>') + '</div>';
             messagesEl.appendChild(div);
-            messagesEl.scrollTop = messagesEl.scrollHeight; // 关键：每次添加消息后滚动到底部
+            messagesEl.scrollTop = messagesEl.scrollHeight; 
         }
 
         function escapeHtml(unsafe){
@@ -379,22 +359,15 @@
                 .replace(/'/g, "&#039;")
         }
         
-        // ===============================================
-        // 机器人响应逻辑
-        // ===============================================
         function handleRuleBasedResponse(userInput) {
             const lowerCaseInput = userInput.toLowerCase();
-
             for (const rule of rules) {
                 for (const keyword of rule.keywords) {
-                    // 检查用户输入是否包含任一关键词
                     if (lowerCaseInput.includes(keyword.toLowerCase())) {
                         return rule.response;
                     }
                 }
             }
-
-            // 如果没有任何规则匹配，则返回默认回复
             return defaultResponse;
         }
 
@@ -402,37 +375,56 @@
             const text = inputEl.value.trim();
             if(!text) return;
             
-            // 1. 显示用户消息
             addMessage('user', text);
             inputEl.value = '';
 
-            // 2. 处理规则匹配并生成回复
             const reply = handleRuleBasedResponse(text);
             
-            // 3. 延迟一小段时间，模拟“思考”过程，增加用户体验
             setTimeout(() => {
                 addMessage('ai', reply);
-            }, 500); // 延迟 500 毫秒
+            }, 500); 
+        }
+
+        // ===============================================
+        // 移动端高度/滚动修复函数
+        // ===============================================
+        function adjustMessagesPadding() {
+            // 只有在屏幕宽度小于 600px 时才进行调整
+            if (window.innerWidth < 600) {
+                // 动态获取 footer 实际高度
+                const footerHeight = footerEl.offsetHeight; 
+                // 设置 CSS 变量，确保 messages 容器底部有足够的空间
+                document.documentElement.style.setProperty('--footer-height', `${footerHeight + 15}px`); 
+            } else {
+                // 桌面端恢复默认值
+                document.documentElement.style.setProperty('--footer-height', `15px`);
+            }
+            messagesEl.scrollTop = messagesEl.scrollHeight; // 重新滚动到底部
         }
 
 
         // 事件监听
         sendBtn.addEventListener('click', sendMessage);
-        
         clearBtn.addEventListener('click', () => { 
             messagesEl.innerHTML=''; 
             inputEl.value=''; 
-            // 清空时重新添加欢迎消息
             addMessage('ai', '欢迎来到 AWaDo 聊天机器人！我是基于预设规则的助手。请问您有什么想了解的 AWaDo 工作室信息吗？');
         });
 
         inputEl.addEventListener('keydown', (e)=>{
-            // 桌面端 Shift+Enter 换行；手机端 Enter 发送
             if(e.key === 'Enter' && !e.shiftKey){
                 e.preventDefault(); sendMessage();
             }
         });
-
+        
+        // 监听窗口大小变化和输入框内容变化（可能会改变 footer 高度）
+        window.addEventListener('resize', adjustMessagesPadding);
+        
+        // 监听输入框高度变化，确保 padding 总是适配
+        inputEl.addEventListener('input', adjustMessagesPadding);
+        
+        // 页面加载完成后立即执行一次
+        window.onload = adjustMessagesPadding;
     </script>
 </body>
 </html>
