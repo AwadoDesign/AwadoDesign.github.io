@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AWaDo 规则聊天机器人</title>
+    <title>AWaDo 聊天机器人</title>
     <style>
         /* AWaDo 品牌配色与基础设置 */
         :root{
@@ -205,9 +205,9 @@
                 <div class="meta">会话历史 — 本系统不会保存您的聊天记录。</div>
                 <div id="messages" class="messages" aria-live="polite">
                     <div class="msg ai">
-                        <div style="font-size:13px;color:var(--awado-green);margin-bottom:6px">AWaDo 规则机器人</div>
+                        <div style="font-size:13px;color:var(--awado-green);margin-bottom:6px">AWaDo 机器人</div>
                         <div>
-                            欢迎来到 AWaDo 规则聊天机器人！我是基于预设规则的助手。请问您有什么想了解的 AWaDo 工作室信息吗？
+                            欢迎来到 AWaDo 聊天机器人！我是基于预设规则的助手。请问您有什么想了解的 AWaDo 工作室信息吗？
                         </div>
                     </div>
                 </div>
@@ -234,33 +234,41 @@
         // ===============================================
         const rules = [
             {
-                keywords: ['卡皮巴拉', '游戏', '作品', 'Capybara'],
+                keywords: ['卡皮巴拉', '游戏', '作品', 'Capybara','game'],
                 response: '我们的主打作品是《卡皮巴拉环游世界》！在这款治愈系冒险游戏中，您将陪伴可爱的卡皮巴拉探索世界，解决小谜题。这是一个放松心灵的旅程！'
             },
             {
-                keywords: ['成员', '团队', '制作人'],
+                keywords: ['成员', '团队', '制作人','人'],
                 response: 'AWaDo 工作室的核心成员包括：Programmer (ZIJUN), Sponsor (YUHENG), Director (SANGYUAN), Language (QINGHUA), Character Design (LEONGYI), 和 Art (SHUSHENG)。我们是六人小团队！'
             },
             {
-                keywords: ['主题曲', '背景音乐', 'BGM'],
+                keywords: ['主题曲', '背景音乐', 'BGM','音乐','music'],
                 response: '我们的主题曲是 `topic_bgm.mp3`。您可以在主页上点击播放按钮收听！它能带给您宁静与欢乐。'
             },
             {
-                keywords: ['你好', '在吗', '喂'],
+                keywords: ['你好', '在吗', '喂','hallo','hi'],
                 response: '你好！我是 AWaDo 规则聊天机器人，很高兴为您服务。请问您有什么问题呢？'
             },
             {
-                keywords: ['谢谢', '感谢', '再见'],
+                keywords: ['谢谢', '感谢', '再见','tq'],
                 response: '不客气！希望您在 AWaDo 的网站上玩得愉快。再见，祝您拥有美好的一天！'
             },
             {
                 keywords: ['联系', 'Telegram', 'TG'],
                 response: '您可以通过点击主页侧边栏的“前往 Telegram”按钮联系我们，提供反馈或寻求支持。'
+            },
+            {
+                keywords: ['gay', '同性恋', '同志','男同'],
+                response: '我不是gay，但ruitao是。'
+            },
+            {
+                keywords: ['ruitao', 'sangyuan', 'leongyi','qinghua','shusheng'],
+                response: '是gay。'
             }
         ];
 
         // 默认回复
-        const defaultResponse = '抱歉，我只是一名规则机器人，无法理解您复杂的问题。我只能回答关于卡皮巴拉、成员或主题曲等预设关键词相关的问题。';
+        const defaultResponse = '抱歉，我只是一名规则机器人，无法理解您复杂的问题。';
 
 
         function addMessage(role, text){
