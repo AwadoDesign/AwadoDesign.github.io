@@ -276,7 +276,7 @@
             const div = document.createElement('div');
             div.className = 'msg ' + (role==='user'?'user':'ai');
             // 机器人名称统一为“AWaDo 规则机器人”
-            div.innerHTML = '<div style="font-size:13px; margin-bottom:6px">'+(role==='user'? '你':'AWaDo 规则机器人')+'</div>' +
+            div.innerHTML = '<div style="font-size:13px; margin-bottom:6px">'+(role==='user'? '你':'AWaDo 机器人')+'</div>' +
                             '<div>' + escapeHtml(text).replace(/\n/g,'<br>') + '</div>';
             messagesEl.appendChild(div);
             messagesEl.scrollTop = messagesEl.scrollHeight; // 关键：每次添加消息后滚动到底部
@@ -335,7 +335,7 @@
             messagesEl.innerHTML=''; 
             inputEl.value=''; 
             // 清空时重新添加欢迎消息
-            addMessage('ai', '欢迎来到 AWaDo 规则聊天机器人！我是基于预设规则的助手。请问您有什么想了解的 AWaDo 工作室信息吗？');
+            addMessage('ai', '欢迎来到 AWaDo 聊天机器人！我是基于预设规则的助手。请问您有什么想了解的 AWaDo 工作室信息吗？');
         });
 
         inputEl.addEventListener('keydown', (e)=>{
