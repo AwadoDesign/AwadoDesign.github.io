@@ -20,7 +20,7 @@
             --app-height: 100vh; 
         }
         
-        /* 1. 核心修复：移动端使用 JS 动态计算的 --app-height */
+        /* 1. 核心修改: 禁用整个页面的滚动 */
         html,body{
             height: var(--app-height); 
             margin:0;
@@ -32,6 +32,8 @@
             color:var(--awado-text);
             display:flex;
             justify-content:center;
+            /* 关键修改：禁用 body 上的滚动条 */
+            overflow: hidden; 
         }
 
         /* 2. APP 容器：在手机端全屏，桌面端固定尺寸 */
@@ -44,7 +46,7 @@
             box-shadow:none; 
             display:grid;
             grid-template-rows:60px 1fr; 
-            overflow:hidden; 
+            overflow:hidden; /* 确保 app 容器内的内容不会导致 body 滚动 */
         }
         
         /* ==================== 头部（Header） ==================== */
@@ -175,21 +177,22 @@
         @media (min-width: 600px) {
             body {
                 align-items: center; 
-                padding: 24px;
+                /* 移除 padding，使内容更贴合视口 */
+                padding: 0; 
             }
             .app{
                 width:900px;
                 max-width:95%;
-                height:720px;
+                /* 确保 app 高度固定，不溢出 body */
+                height:720px; 
                 border-radius:12px;
                 box-shadow:0 8px 30px rgba(0,0,0,.5);
-                grid-template-rows:72px 1fr;
-                height: 720px; 
+                /* 修复了 header height 的 grid-template-rows */
+                grid-template-rows: 72px 1fr; 
             }
             header{ 
                 padding: 14px 18px; 
-                height: 45px; 
-                /* 确保头部底部有分隔线 */
+                height: 72px; /* 匹配 grid-template-rows 中的高度 */
                 border-bottom:1px solid rgba(255,255,255,.1); 
             }
             header .logo{ width:40px; height:40px; }
@@ -200,14 +203,14 @@
             .pane{
                 flex-direction: row; 
                 gap:0; 
-                padding: 0; /* 移除所有填充，实现聊天框紧贴 header */
+                padding: 0; 
             }
             .chat{
                 flex:1; 
                 background: var(--chat-bg); 
                 position: static; 
                 box-shadow: none; 
-                border-radius: 0 0 12px 12px; /* 聊天框只保留底部圆角 */
+                border-radius: 0 0 12px 12px; 
                 padding: 0; 
                 box-sizing: border-box; 
             }
@@ -232,11 +235,11 @@
             .chat footer {
                 position: static;
                 border-top: 1px solid rgba(255,255,255,.05);
-                padding:18px; /* 增加整体填充 */
+                padding:18px; 
                 min-height: initial;
-                align-items: center; /* 垂直居中 */
-                background-color: var(--awado-card); /* 使底部区域与 header 颜色一致，形成分层 */
-                border-radius: 0 0 12px 12px; /* 确保底部圆角 */
+                align-items: center; 
+                background-color: var(--awado-card); 
+                border-radius: 0 0 12px 12px; 
             }
             
             /* 调整聊天气泡 */
