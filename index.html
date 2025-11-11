@@ -1,185 +1,111 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AWaDo Design</title>
-    <link rel="icon" href="awado_icon.png" type="image/png">
+    <title>AWADO Studio</title>
+    <link rel="icon" type="image/png" href="awado_icon.png">
     <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background: #ffffff;
             color: #333;
-            scroll-behavior: smooth;
         }
-        .header {
-            background-image: url('ct_room.jpg');
-            background-size: cover;
-            background-position: center;
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        .header h1 {
-            font-size: 3em;
-            margin: 0;
-        }
+
+        /* 顶部导航栏 */
         .navbar {
-            background-color: rgba(0, 0, 0, 0.85);
+            width: 100%;
+            background: black;
+            color: white;
             padding: 10px 20px;
             display: flex;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
         }
-        .navbar .logo {
-            height: 45px;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
+
         .navbar .studio-name {
             color: white;
             font-size: 1.5em;
             font-weight: bold;
             text-decoration: none;
             margin-right: auto;
-
-            display: flex;        /* ✅ 让图标+文字并排 */
-            align-items: center;  /* ✅ 垂直居中 */
-        }
-
-        /* --- 搜索框样式开始 --- */
-        .search-box {
-            margin-right: 20px;
             display: flex;
             align-items: center;
         }
-        .search-box input {
-            padding: 8px 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px 0 0 4px;
-            font-size: 1em;
-            outline: none;
-            width: 150px;
+
+        .navbar .logo {
+            height: 45px;
+            margin-right: 10px;
+            vertical-align: middle;
         }
-        .search-box button {
-            padding: 8px 12px;
-            background-color: #007bff;
-            color: white;
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-bar input {
+            padding: 5px;
+            border-radius: 5px;
             border: none;
-            border-radius: 0 4px 4px 0;
+            width: 200px;
+        }
+
+        .search-bar button {
+            padding: 6px 10px;
+            background: #ffcc00;
+            color: black;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s;
-        }
-        .search-box button:hover {
-            background-color: #0056b3;
-        }
-        /* --- 搜索框样式结束 --- */
-
-        /* --- 下拉导航菜单样式 --- */
-        .dropdown {
-            position: relative;
-        }
-        .dropdown-toggle {
-            color: white;
-            font-size: 1.1em;
-            cursor: pointer;
-            padding: 5px 10px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            user-select: none;
-            display: flex;
-            align-items: center;
-        }
-        .dropdown-icon {
-            margin-left: 8px;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            transition: transform 0.3s ease;
-        }
-        .dropdown-icon.collapsed {
-            border-width: 5px 0 5px 8px;
-            border-color: transparent transparent transparent white;
-        }
-        .dropdown-icon.expanded {
-            border-width: 8px 5px 0 5px;
-            border-color: white transparent transparent transparent;
         }
 
-        .nav-links {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: rgba(0, 0, 0, 0.9);
-            min-width: 150px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-            z-index: 10;
-            padding: 5px 0;
-            border-radius: 0 0 4px 4px;
-        }
-        .nav-links.show {
-            display: block;
-        }
-        .nav-links a {
-            color: white;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            text-align: left;
-            transition: background-color 0.3s;
-        }
-        .nav-links a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        /* 上半部分横幅背景图 */
+        .banner {
+            width: 100%;
+            height: 300px;
+            background-image: url('ct_room.jpg');
+            background-size: cover;
+            background-position: center;
         }
 
-        .content-section {
-            background-color: white;
+        /* 白色内容区 */
+        .white-section {
+            background: white;
             padding: 40px 20px;
-            max-width: 960px;
-            margin: 20px auto;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .left-content, .right-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 300px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .right-content button {
+            padding: 10px 18px;
+            border: none;
+            background: #0084ff;
+            color: white;
+            font-weight: bold;
             border-radius: 8px;
-        }
-        .content-section > h2:before {
-            content: "";
-            display: block;
-            height: 90px;
-            margin-top: -90px;
-            visibility: hidden;
-        }
-        .content-section h2 {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 30px;
-            color: #007bff;
+            cursor: pointer;
         }
 
-        .comments-container {
-            padding-top: 40px;
-            border-top: 1px solid #eee;
-            margin-top: 40px;
+        .right-content button:hover {
+            background: #006fd8;
         }
 
-        .button-container { text-align: center; margin-bottom: 40px; }
-        .music-button { padding: 12px 25px; font-size: 1.1em; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease; }
-        .music-button:hover { background-color: #218838; }
-        .game-showcase { display: flex; flex-direction: column; align-items: center; margin-bottom: 40px; text-align: center; }
-        .game-showcase img { width: 150px; height: 150px; border-radius: 15px; object-fit: cover; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
-        .game-showcase h3 { color: #007bff; margin-bottom: 15px; }
-        .development-process { text-align: center; margin-bottom: 40px; }
-        .development-process img { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-bottom: 20px; }
-        .member-list { list-style-type: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
-        .member-list li { background-color: #e9ecef; padding: 10px 20px; border-radius: 5px; font-weight: bold; color: #495057; }
-        audio { display: none; }
-
+        /* 搜索高亮 */
         .highlight {
             background: yellow;
             color: black;
@@ -187,148 +113,49 @@
         }
     </style>
 </head>
+
 <body>
 
+    <!-- 导航栏 -->
     <div class="navbar">
-        <a href="#" class="studio-name">
-            <img src="awado_icon.png" alt="AWADO Logo" class="logo">
-            AWaDo Design
-        </a>
-
-        <div class="search-box">
-            <input type="text" placeholder="搜索关键字..." id="searchInput">
-            <button id="searchButton">🔍 搜索</button>
+        <a href="#" class="studio-name"><img src="awado_icon.png" class="logo">AWaDo Design</a>
+        <div class="search-bar">
+            <input type="text" placeholder="在网页内搜索" id="searchInput">
+            <button id="searchButton">搜索</button>
         </div>
+    </div>
 
-        <div class="dropdown">
-            <div class="dropdown-toggle" id="dropdownToggle">
-                分类
-                <span class="dropdown-icon collapsed" id="dropdownIcon"></span>
+    <!-- 上背景图 -->
+    <div class="banner"></div>
+
+    <!-- 白色主内容 -->
+    <section class="white-section">
+        <div class="content-wrapper">
+
+            <!-- 左侧内容 -->
+            <div class="left-content">
+                <h2>我们的第一款游戏</h2>
+                <p>卡皮巴拉生存：一款魔性挂机小游戏（BETA）。</p>
+                <h2>我们是谁？</h2>
+                <p>由热爱游戏开发的学生组成。</p>
+                <h2>我们的目标</h2>
+                <p>制作出令人上瘾且创意十足的游戏作品。</p>
             </div>
 
-            <div class="nav-links" id="navLinks">
-                <a href="#music">主题曲</a>
-                <a href="#game">我们的游戏</a>
-                <a href="#dev-process">开发过程</a>
-                <a href="#members">工作室成员</a>
-                <a href="#comments">用户评论</a>
+            <!-- ✅ 右侧新增反馈内容 -->
+            <div class="right-content">
+                <h2>反馈工作室</h2>
+                <p>遇到 bug？愿意提建议？点下面联系我们！</p>
+                <button onclick="window.location.href='https://t.me/zijun0108'">
+                    前往 Telegram
+                </button>
             </div>
+
         </div>
-    </div>
-
-    <div class="header">
-        <h1>AWaDo Studio</h1>
-    </div>
-
-    <div class="content-section">
-        <h2 id="music">工作室主题曲</h2>
-        <div class="button-container">
-            <button class="music-button" id="playPauseButton">播放创作室主题曲</button>
-            <audio id="backgroundMusic" src="topic_bgm.mp3" loop></audio>
-        </div>
-
-        <h2 id="game">我们的游戏</h2>
-        <div class="game-showcase">
-            <img src="cpbr_icon.jpg" alt="卡皮巴拉环游世界图标">
-            <h3>卡皮巴拉环游世界</h3>
-            <p>
-                踏上一场与众不同的全球冒险之旅，扮演最佛系但也最具魅力的动物——卡皮巴拉！
-                在这款轻松愉快的冒险游戏中，你将陪伴可爱的卡皮巴拉探索世界各地的奇妙风光。
-                从热带雨林到冰雪覆盖的山脉，从繁华都市到宁静乡村，每到一个地方，
-                卡皮巴拉都会用它独特的“佛系”方式与当地居民互动，解决各种有趣的小谜题。
-                收集独特的纪念品，解锁新的服装，结交各种奇奇怪怪的朋友。
-                《卡皮巴拉环游世界》不仅是一款游戏，更是一次心灵的放松之旅，让你在繁忙的生活中找到一片宁静与欢乐。
-                快来加入卡皮巴拉，一起开启这场治愈系的环球旅行吧！
-            </p>
-        </div>
-
-        <h2 id="dev-process">游戏开发过程</h2>
-        <div class="development-process">
-            <img src="bg_ing.jpg" alt="游戏开发工作图">
-            <p>
-                从最初的概念草图到最终的像素渲染，我们的团队倾注了无数心血来打造《卡皮巴拉环游世界》的每一个细节。
-                我们从大自然的色彩中汲取灵感，精心设计每一帧动画，力求还原卡皮巴拉最真实、最可爱的形态。
-                绘画过程中，我们反复推敲光影效果，尝试不同的笔触和纹理，以确保游戏画面既生动又富有艺术感。
-                从场景搭建到角色建模，再到UI界面的设计，每一个环节都经过了严谨的讨论和修改，
-                旨在为玩家提供最沉浸、最愉悦的游戏体验。
-                这张工作图展示了我们对细节的执着，以及在创作过程中不断探索和完善的精神。
-            </p>
-        </div>
-
-        <h2 id="members">工作室成员</h2>
-        <ul class="member-list">
-            <li>Programmer : ZIJUN</li>
-            <li>Sponsor : YUHENG</li>
-            <li>Director : SANGYUAN</li>
-            <li>Language : QINGHUA</li>
-            <li>Character Design : LEONGYI</li>
-            <li>Art : SHUSHENG</li>
-        </ul>
-
-        <h2 id="comments" style="padding-top: 30px;">用户评论区 </h2>
-
-        <div class="comments-container">
-            <script src="https://utteranc.es/client.js"
-                    repo="AwadoDesign/AwadoDesign.github.io" 
-                    issue-term="pathname"
-                    theme="github-dark" 
-                    crossorigin="anonymous"
-                    async>
-            </script>
-        </div>
-
-    </div>
+    </section>
 
     <script>
-        const backgroundMusic = document.getElementById('backgroundMusic');
-        const playPauseButton = document.getElementById('playPauseButton');
-        let isPlaying = false;
-
-        playPauseButton.addEventListener('click', () => {
-            if (isPlaying) {
-                backgroundMusic.pause();
-                playPauseButton.textContent = '播放创作室主题曲';
-            } else {
-                backgroundMusic.play().catch(error => {
-                    console.error("Audio play failed:", error);
-                    alert("主题曲可能需要您再次点击播放按钮才能开始播放。");
-                    playPauseButton.textContent = '播放创作室主题曲'; 
-                    isPlaying = false;
-                });
-                playPauseButton.textContent = '暂停创作室主题曲';
-            }
-            isPlaying = !isPlaying;
-        });
-
-        const dropdownToggle = document.getElementById('dropdownToggle');
-        const navLinks = document.getElementById('navLinks');
-        const dropdownIcon = document.getElementById('dropdownIcon');
-        const navLinksAnchor = navLinks.querySelectorAll('a');
-
-        dropdownToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('show');
-            dropdownIcon.classList.toggle('collapsed');
-            dropdownIcon.classList.toggle('expanded');
-        });
-
-        navLinksAnchor.forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('show');
-                dropdownIcon.classList.remove('expanded');
-                dropdownIcon.classList.add('collapsed');
-            });
-        });
-
-        document.addEventListener('click', (event) => {
-            if (!dropdownToggle.contains(event.target) && !navLinks.contains(event.target)) {
-                if (navLinks.classList.contains('show')) {
-                    navLinks.classList.remove('show');
-                    dropdownIcon.classList.remove('expanded');
-                    dropdownIcon.classList.add('collapsed');
-                }
-            }
-        });
-
+        // 搜索功能 JS
         const searchInput = document.getElementById('searchInput');
         const searchButton = document.getElementById('searchButton');
 
@@ -348,15 +175,18 @@
             }
 
             const regex = new RegExp(query, "gi");
+
             let found = false;
 
             document.querySelectorAll("p, h2, li, h3").forEach(el => {
                 if (regex.test(el.innerText)) {
                     found = true;
+
                     el.innerHTML = el.innerHTML.replace(
                         regex,
                         match => `<span class="highlight">${match}</span>`
                     );
+
                     el.scrollIntoView({behavior: "smooth", block: "center"});
                 }
             });
@@ -364,18 +194,17 @@
             if (!found) {
                 alert("未找到相关内容。");
             }
-
-            searchInput.value = "";
         }
 
+        // 点击搜索按钮
         searchButton.addEventListener('click', searchContent);
 
+        // 回车触发搜索
         searchInput.addEventListener("keypress", function (event) {
             if (event.key === "Enter") {
                 searchContent();
             }
         });
-
     </script>
 
 </body>
