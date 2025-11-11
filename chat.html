@@ -9,14 +9,15 @@
         /* AWaDo 品牌配色与基础设置 */
         :root{
             --awado-bg: #0f1724; 
-            --awado-card: #1e1e1e; 
+            --awado-card: #1e1e1e; /* 用于 app 容器和桌面端 sidebar */
             --awado-text: #e6eef6; 
             --awado-muted: #9aa4b2; 
             --awado-green: #2ecc71; 
             --awado-red: #e74c3c; 
             --awado-blue: #3498db; 
-            --footer-height: 80px; /* 预估底部输入框高度 */
-            --app-height: 100vh; /* JS 动态计算的视口高度 */
+            --chat-bg: #0b1220; /* 聊天背景色 */
+            --footer-height: 80px; 
+            --app-height: 100vh; 
         }
         
         /* 1. 核心修复：移动端使用 JS 动态计算的 --app-height */
@@ -38,7 +39,7 @@
             width: 100%; 
             max-width: none; 
             height: var(--app-height); 
-            background:var(--awado-card);
+            background:var(--awado-card); /* 桌面端作为最外层背景 */
             border-radius:0; 
             box-shadow:none; 
             display:grid;
@@ -81,7 +82,7 @@
         
         .chat{
             flex:1;
-            background:#0b1220; 
+            background:var(--chat-bg); /* 手机端的聊天背景 */
             padding:0; 
             border-radius:0; 
             display:flex;
@@ -93,7 +94,7 @@
         /* ==================== 消息区（Messages）- 核心滚动区域 ==================== */
         .messages{
             padding:15px; 
-            padding-bottom: var(--footer-height); /* 预留底部输入框空间 */
+            padding-bottom: var(--footer-height); 
             overflow-y:auto; 
             -webkit-overflow-scrolling: touch; 
             flex:1; 
@@ -191,23 +192,30 @@
             .pane{
                 flex-direction: row; 
                 gap:18px;
-                padding:18px;
+                padding:18px; /* 间距在这里生效 */
             }
+            /* 关键修复 1: 侧边栏样式调整 */
             .sidebar{
-                display: block; /* 桌面端恢复显示 */
+                display: block; 
                 width:240px;
                 align-self: stretch;
                 padding: 15px;
+                background: var(--awado-bg); /* 添加背景色，使其与 app 容器的 awado-card 区分 */
                 border-radius: 10px;
+                box-shadow: inset 0 0 5px rgba(0,0,0,0.2); /* 增加内阴影以区分 */
+                flex-shrink: 0;
             }
+            /* 关键修复 2: 聊天区样式调整 */
             .chat{
                 border-radius:10px;
                 position: static; 
+                background: var(--chat-bg); /* 确保背景色正确 */
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* 增加阴影以突出 */
             }
             .messages{
                 flex: 1; 
                 padding:15px 10px;
-                padding-bottom: 15px; /* 移除底部填充 */
+                padding-bottom: 15px; 
                 gap:15px;
             }
             .messages::-webkit-scrollbar {width: 8px;} 
@@ -334,7 +342,6 @@
                 keywords: ['谢谢', '感谢', '再见','tq'],
                 response: '不客气！希望您在 AWaDo 的网站上玩得愉快。再见，祝您拥有美好的一天！'
             }
-            // 保持您的特色规则
             ,
             {
                 keywords: ['联系', 'Telegram', 'TG'],
@@ -369,7 +376,6 @@
         }
 
         function escapeHtml(unsafe){
-            // 此函数仅用于基本的 HTML 实体转义
             return unsafe
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
