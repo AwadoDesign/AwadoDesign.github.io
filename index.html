@@ -195,7 +195,7 @@
         .game-showcase {
             display: flex;
             flex-direction: column;
-            align-items: center; /* 保持居中 */
+            align-items: center; 
             margin-bottom: 40px;
             padding: 20px;
             border: 1px solid #eee;
@@ -205,6 +205,15 @@
         .game-showcase:hover { border-color: #e74c3c; }
         .game-showcase img { width: 180px; height: 180px; border-radius: 15px; object-fit: cover; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
         .game-showcase h3 { color: #3498db; margin-bottom: 15px; font-size: 1.5em; }
+        
+        /* 🔥 关键修复：限制 bg_ing.jpg 的尺寸 */
+        .development-process img {
+            max-width: 100%; /* 图片最大宽度为其父容器的 100% */
+            height: auto;    /* 保持图片比例 */
+            display: block;  /* 确保块级显示，方便控制 */
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
         
         /* 音乐按钮美化 */
         .button-container { text-align: center; margin-bottom: 40px; }
@@ -255,8 +264,8 @@
             .content-wrapper { 
                 flex-direction: column; 
                 gap: 15px; 
-                padding: 0 10px; /* 减小侧边内边距 */
-                margin: 15px auto; /* 减小顶部边距 */
+                padding: 0 10px; 
+                margin: 15px auto; 
             }
 
             /* 导航栏换行和对齐修复 */
@@ -271,39 +280,39 @@
             }
             .dropdown { 
                 order: 2; 
-                margin-left: 10px; /* 增加与 logo 的间距 */
+                margin-left: 10px; 
             }
             
             /* 搜索框占据整行，并统一圆角 */
             .search-box { 
                 order: 3; 
                 width: 100%; 
-                margin: 10px 0 0 0; /* 放置在底部，并清除左右边距 */
+                margin: 10px 0 0 0; 
             }
             .search-box input { 
-                width: calc(100% - 40px); /* 占据剩余宽度 */
+                width: calc(100% - 40px); 
                 border-radius: 20px 0 0 20px; 
             }
             .search-box button { 
                 padding: 9px 15px;
                 border-radius: 0 20px 20px 0; 
-                width: 40px; /* 固定按钮宽度 */
+                width: 40px; 
             }
 
             /* 内容宽度和填充 */
             .left-content, .right-content{ 
                 flex:100%; 
-                padding: 15px; /* 减小内边距 */
+                padding: 15px; 
             }
             
             /* 标题调整 */
             .left-content h2 { 
                 font-size: 1.5em; 
-                text-align: center; /* 标题居中 */
+                text-align: center; 
             }
             /* 游戏展示区域居中修复 */
             .game-showcase p {
-                text-align: left; /* 文本保持左对齐 */
+                text-align: left; 
             }
         }
     </style>
