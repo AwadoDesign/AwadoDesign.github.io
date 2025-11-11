@@ -190,11 +190,11 @@
             header h1{ font-size:18px; }
             .small{display: block;} 
             
-            /* 关键修改 1: pane 增加四周留白 (上、下、左、右) */
+            /* 关键修改 1: pane 移除顶部填充，仅保留左右和底部填充 */
             .pane{
                 flex-direction: row; 
                 gap:0; 
-                padding: 18px; 
+                padding: 0 18px 12px 18px; /* 顶部0，左右18px，底部12px */
             }
             .sidebar{
                 display: none; 
@@ -205,35 +205,35 @@
                 position: static; 
                 box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
                 border-radius: 10px; 
-                
-                /* 关键修改 2: chat 内部布局不需要水平填充 */
                 padding: 0; 
                 box-sizing: border-box; 
             }
             
-            /* 关键修改 3: messages 增加左右填充，提供左右留白 */
+            /* 关键修改 2: meta 增加顶部填充，并统一左右填充 */
+            .meta {
+                 padding: 12px 18px 8px 18px; /* 顶部增加填充 */
+            }
+            
+            /* 关键修改 3: messages 统一填充 */
             .messages{
                 flex: 1; 
-                padding: 15px 18px; /* 垂直 15px，水平 18px 留白 */
+                padding: 15px 18px; 
                 gap:15px;
             }
-            /* 关键修改 4: meta 随 messages 填充对齐 */
-            .meta {
-                 padding: 8px 18px;
-            }
 
-            /* 关键修改 5: footer 增加左右填充，提供输入区留白 */
+            /* 关键修改 4: footer 调整垂直对齐 */
             .chat footer {
                 position: static;
                 border-top: 1px solid rgba(255,255,255,.05);
-                padding:12px 18px; /* 垂直 12px，水平 18px 留白 */
-                min-height: initial; 
+                padding:12px 18px; 
+                min-height: initial;
+                /* 核心修复：垂直居中 */
+                align-items: center; 
             }
             
-            /* 调整聊天气泡，使其在 messages 内部居中 */
+            /* 调整聊天气泡 */
             .msg {
-                max-width: 85%; /* 稍微减小最大宽度，提供更多边缘留白 */
-                /* 确保 padding/margin 继承/重置正确 */
+                max-width: 85%; 
                 padding:12px 15px;
             }
             .msg.user {
@@ -253,7 +253,11 @@
                 padding: 12px;
                 font-size: 15px;
             }
-            .footer-btns{ gap:8px; }
+            .footer-btns{ 
+                gap:8px; 
+                /* 确保按钮组居中对齐 */
+                align-self: center; 
+            }
             .btn{ padding:10px 14px; font-size: initial; }
             
         }
