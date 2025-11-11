@@ -88,21 +88,22 @@
             display:flex;
             flex-direction:column;
             position: relative; 
-            overflow: hidden; 
+            overflow: hidden; /* 确保 chat 本身不滚动 */
         }
         
         /* ==================== 消息区（Messages）- 核心滚动区域 ==================== */
         .messages{
             padding:15px; 
             padding-bottom: var(--footer-height); 
-            overflow-y:auto; 
+            overflow-y:auto; /* 消息列表滚动 */
             -webkit-overflow-scrolling: touch; 
             flex:1; 
             display:flex;
             flex-direction:column;
             gap:12px;
         }
-        .messages::-webkit-scrollbar {width: 0;} 
+        /* 隐藏滚动条以增强视觉效果，但保留滚动功能 */
+        .messages::-webkit-scrollbar {width: 0; display: none;} 
         
         .msg{
             max-width:90%; 
@@ -187,7 +188,7 @@
             }
             header{ 
                 padding: 14px 18px; 
-                height: 45px; 
+                height: 72px; 
                 /* 确保头部底部有分隔线 */
                 border-bottom:1px solid rgba(255,255,255,.1); 
             }
@@ -201,15 +202,12 @@
                 gap:0; 
                 padding: 0; /* 移除所有填充，实现聊天框紧贴 header */
             }
-            .sidebar{
-                display: none; 
-            }
             .chat{
                 flex:1; 
                 background: var(--chat-bg); 
                 position: static; 
-                box-shadow: none; /* 移除聊天框本身的阴影 */
-                border-radius: 0 0 12px 12px; /* 聊天框只保留底部圆角，与 app 容器的底部圆角对齐 */
+                box-shadow: none; 
+                border-radius: 0 0 12px 12px; /* 聊天框只保留底部圆角 */
                 padding: 0; 
                 box-sizing: border-box; 
             }
@@ -217,21 +215,24 @@
             /* 关键修改 2: meta 增加统一填充 */
             .meta {
                  padding: 12px 18px 8px 18px; 
-                 border-bottom: 1px dashed rgba(255,255,255,.05); /* 强化分隔线 */
+                 border-bottom: 1px dashed rgba(255,255,255,.05); 
             }
             
-            /* 关键修改 3: messages 统一填充 */
+            /* 关键修改 3: messages 统一填充，保持滚动功能 */
             .messages{
                 flex: 1; 
                 padding: 15px 18px; 
                 gap:15px;
+                overflow-y: auto; /* 消息过多时，messages 区域滚动 */
             }
+            /* 桌面端隐藏滚动条，保持内容滚动 */
+            .messages::-webkit-scrollbar {width: 0; display: none;} 
 
             /* 关键修改 4: footer 垂直居中，并增加底部填充 */
             .chat footer {
                 position: static;
                 border-top: 1px solid rgba(255,255,255,.05);
-                padding:18px; /* 增加整体填充，以实现居中效果 */
+                padding:18px; /* 增加整体填充 */
                 min-height: initial;
                 align-items: center; /* 垂直居中 */
                 background-color: var(--awado-card); /* 使底部区域与 header 颜色一致，形成分层 */
@@ -430,6 +431,7 @@
                 const doc = document.documentElement;
                 doc.style.setProperty('--app-height', `${window.innerHeight}px`);
             } else {
+                // 桌面端使用固定高度，避免浏览器UI变化导致滚动条出现
                 document.documentElement.style.setProperty('--app-height', `720px`);
             }
         };
