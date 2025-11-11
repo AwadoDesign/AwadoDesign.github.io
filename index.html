@@ -39,7 +39,8 @@
         }
         .navbar .logo {
             height: 45px;
-            margin-right: 15px;
+            margin-right: 10px;
+            vertical-align: middle;
         }
         .navbar .studio-name {
             color: white;
@@ -47,6 +48,9 @@
             font-weight: bold;
             text-decoration: none;
             margin-right: auto;
+
+            display: flex;        /* ✅ 让图标+文字并排 */
+            align-items: center;  /* ✅ 垂直居中 */
         }
 
         /* --- 搜索框样式开始 --- */
@@ -55,7 +59,6 @@
             display: flex;
             align-items: center;
         }
-
         .search-box input {
             padding: 8px 10px;
             border: 1px solid #ccc;
@@ -64,7 +67,6 @@
             outline: none;
             width: 150px;
         }
-
         .search-box button {
             padding: 8px 12px;
             background-color: #007bff;
@@ -75,7 +77,6 @@
             font-size: 1em;
             transition: background-color 0.3s;
         }
-
         .search-box button:hover {
             background-color: #0056b3;
         }
@@ -85,7 +86,6 @@
         .dropdown {
             position: relative;
         }
-
         .dropdown-toggle {
             color: white;
             font-size: 1.1em;
@@ -97,7 +97,6 @@
             display: flex;
             align-items: center;
         }
-
         .dropdown-icon {
             margin-left: 8px;
             width: 0;
@@ -105,12 +104,10 @@
             border-style: solid;
             transition: transform 0.3s ease;
         }
-
         .dropdown-icon.collapsed {
             border-width: 5px 0 5px 8px;
             border-color: transparent transparent transparent white;
         }
-
         .dropdown-icon.expanded {
             border-width: 8px 5px 0 5px;
             border-color: white transparent transparent transparent;
@@ -128,11 +125,9 @@
             padding: 5px 0;
             border-radius: 0 0 4px 4px;
         }
-
         .nav-links.show {
             display: block;
         }
-
         .nav-links a {
             color: white;
             padding: 12px 16px;
@@ -141,7 +136,6 @@
             text-align: left;
             transition: background-color 0.3s;
         }
-
         .nav-links a:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
@@ -186,7 +180,6 @@
         .member-list li { background-color: #e9ecef; padding: 10px 20px; border-radius: 5px; font-weight: bold; color: #495057; }
         audio { display: none; }
 
-        /* ✅ 搜索高亮样式 */
         .highlight {
             background: yellow;
             color: black;
@@ -201,18 +194,18 @@
             <img src="awado_icon.png" alt="AWADO Logo" class="logo">
             AWaDo Design
         </a>
-        
+
         <div class="search-box">
             <input type="text" placeholder="搜索关键字..." id="searchInput">
             <button id="searchButton">🔍 搜索</button>
         </div>
-        
+
         <div class="dropdown">
             <div class="dropdown-toggle" id="dropdownToggle">
                 分类
                 <span class="dropdown-icon collapsed" id="dropdownIcon"></span>
             </div>
-            
+
             <div class="nav-links" id="navLinks">
                 <a href="#music">主题曲</a>
                 <a href="#game">我们的游戏</a>
@@ -271,7 +264,7 @@
             <li>Character Design : LEONGYI</li>
             <li>Art : SHUSHENG</li>
         </ul>
-        
+
         <h2 id="comments" style="padding-top: 30px;">用户评论区 </h2>
 
         <div class="comments-container">
@@ -283,11 +276,10 @@
                     async>
             </script>
         </div>
-        
+
     </div>
 
     <script>
-        // 音乐播放控制 
         const backgroundMusic = document.getElementById('backgroundMusic');
         const playPauseButton = document.getElementById('playPauseButton');
         let isPlaying = false;
@@ -308,7 +300,6 @@
             isPlaying = !isPlaying;
         });
 
-        // 下拉菜单控制
         const dropdownToggle = document.getElementById('dropdownToggle');
         const navLinks = document.getElementById('navLinks');
         const dropdownIcon = document.getElementById('dropdownIcon');
@@ -338,7 +329,6 @@
             }
         });
 
-        // ✅ 站内搜索功能
         const searchInput = document.getElementById('searchInput');
         const searchButton = document.getElementById('searchButton');
 
@@ -356,7 +346,7 @@
                 alert("请输入搜索关键字。");
                 return;
             }
-            
+
             const regex = new RegExp(query, "gi");
             let found = false;
 
