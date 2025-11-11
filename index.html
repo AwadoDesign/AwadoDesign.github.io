@@ -17,7 +17,7 @@
             background-image: url('ct_room.jpg');
             background-size: cover;
             background-position: center;
-            height: 400px; 
+            height: 400px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -39,7 +39,7 @@
             z-index: 1000;
         }
         .navbar .logo {
-            height: 30px;
+            height: 45px; /* <<<< 图标调大 */
             margin-right: 15px;
         }
         .navbar .studio-name {
@@ -47,8 +47,40 @@
             font-size: 1.5em;
             font-weight: bold;
             text-decoration: none;
-            margin-right: auto; /* 推开右侧的菜单 */
+            margin-right: auto; /* 推开右侧的搜索和菜单 */
         }
+
+        /* --- 搜索框样式开始 --- */
+        .search-box {
+            margin-right: 20px; /* 在搜索框和“分类”之间留出空间 */
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box input {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px 0 0 4px; /* 左侧圆角 */
+            font-size: 1em;
+            outline: none;
+            width: 150px; /* 调整输入框宽度 */
+        }
+
+        .search-box button {
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0; /* 右侧圆角 */
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+
+        .search-box button:hover {
+            background-color: #0056b3;
+        }
+        /* --- 搜索框样式结束 --- */
 
         /* --- 下拉导航菜单样式 --- */
         .dropdown {
@@ -132,8 +164,8 @@
         .content-section > h2:before {
             content: "";
             display: block;
-            height: 70px;
-            margin-top: -70px;
+            height: 90px; /* <<<< 适应增高后的导航栏 */
+            margin-top: -90px; /* <<<< 适应增高后的导航栏 */
             visibility: hidden;
         }
         .content-section h2 {
@@ -170,6 +202,11 @@
             <img src="awado_icon.png" alt="AWADO Logo" class="logo">
             AWaDo Design
         </a>
+        
+        <div class="search-box">
+            <input type="text" placeholder="搜索关键字..." id="searchInput">
+            <button id="searchButton">🔍 搜索</button>
+        </div>
         
         <div class="dropdown">
             <div class="dropdown-toggle" id="dropdownToggle">
@@ -301,6 +338,22 @@
                     dropdownIcon.classList.remove('expanded');
                     dropdownIcon.classList.add('collapsed');
                 }
+            }
+        });
+
+        // 搜索功能 JS 交互添加
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+
+        searchButton.addEventListener('click', () => {
+            const query = searchInput.value.trim();
+            if (query) {
+                // 这里可以添加实际的搜索逻辑，目前只是一个弹窗提示
+                alert(`您尝试搜索："${query}"。此功能目前仅为演示，实际搜索逻辑待开发。`);
+                // 清空输入框
+                searchInput.value = '';
+            } else {
+                alert('请输入搜索关键字。');
             }
         });
     </script>
