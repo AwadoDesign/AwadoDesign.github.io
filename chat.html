@@ -127,7 +127,7 @@
             text-align: center;
         }
         
-        /* ==================== 底部（Footer） - 绝对定位固定底部 ==================== */
+        /* ==================== 底部（Footer） - 绝对定位固定底部（手机端） ==================== */
         footer{
             position: absolute; 
             bottom: 0;
@@ -190,13 +190,11 @@
             header h1{ font-size:18px; }
             .small{display: block;} 
             
-            /* 关键修改 1: pane 增加顶部和侧面留白 */
+            /* 关键修改 1: pane 增加四周留白 (上、下、左、右) */
             .pane{
                 flex-direction: row; 
                 gap:0; 
-                padding: 18px; /* 增加整体填充：上、下、左、右 */
-                padding-top: 18px; /* 顶部留白 */
-                padding-bottom: 18px;
+                padding: 18px; 
             }
             .sidebar{
                 display: none; 
@@ -205,41 +203,58 @@
                 flex:1; 
                 background: var(--chat-bg); 
                 position: static; 
-                box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* 增加阴影，使聊天框突出 */
-                border-radius: 10px; /* 聊天框四角圆角 */
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
+                border-radius: 10px; 
                 
-                /* 关键修改 2: chat 内部填充，提供左右侧空间 */
-                padding: 0 18px; /* 左右填充，上下由内部元素控制 */
+                /* 关键修改 2: chat 内部布局不需要水平填充 */
+                padding: 0; 
                 box-sizing: border-box; 
             }
-            .meta {
-                 padding-left: 0;
-                 padding-right: 0;
-            }
+            
+            /* 关键修改 3: messages 增加左右填充，提供左右留白 */
             .messages{
                 flex: 1; 
-                /* messages 不再需要 padding，因为它应该填满 chat 的高度 */
-                padding: 15px 0; /* 垂直填充，水平填充为 0 */
+                padding: 15px 18px; /* 垂直 15px，水平 18px 留白 */
                 gap:15px;
             }
-             
+            /* 关键修改 4: meta 随 messages 填充对齐 */
+            .meta {
+                 padding: 8px 18px;
+            }
+
+            /* 关键修改 5: footer 增加左右填充，提供输入区留白 */
             .chat footer {
                 position: static;
                 border-top: 1px solid rgba(255,255,255,.05);
-                padding:12px 0; /* 垂直填充，水平填充为 0 */
+                padding:12px 18px; /* 垂直 12px，水平 18px 留白 */
                 min-height: initial; 
             }
             
-            /* 调整聊天气泡，使其在 chat 内部居中 */
+            /* 调整聊天气泡，使其在 messages 内部居中 */
             .msg {
-                max-width: 95%; /* 增加最大宽度，防止内容太贴近边缘 */
+                max-width: 85%; /* 稍微减小最大宽度，提供更多边缘留白 */
+                /* 确保 padding/margin 继承/重置正确 */
+                padding:12px 15px;
             }
             .msg.user {
                 margin-left: auto;
+                margin-right: 0;
             }
             .msg.ai {
                 margin-right: auto;
+                margin-left: 0;
             }
+            
+            /* 调整输入框和按钮的相对位置 */
+            textarea {
+                min-height:56px;
+                max-height:120px;
+                resize: vertical; 
+                padding: 12px;
+                font-size: 15px;
+            }
+            .footer-btns{ gap:8px; }
+            .btn{ padding:10px 14px; font-size: initial; }
             
         }
     </style>
