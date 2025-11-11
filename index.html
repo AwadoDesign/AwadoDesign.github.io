@@ -12,8 +12,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f2f5;
             color: #333;
-            /* 关键的 CSS 平滑滚动，支持所有内部锚点链接（但 JS 会覆盖并提供更精确的控制） */
-            scroll-behavior: smooth; 
+            scroll-behavior: smooth;
             overflow-x: hidden;
         }
 
@@ -60,7 +59,7 @@
             align-items: center;
         }
 
-        /* --- 搜索框样式 --- */
+        /* --- 搜索框样式 (桌面端) --- */
         .search-box {
             margin-right: 25px;
             display: flex;
@@ -177,18 +176,18 @@
         
         /* 标题样式突出 */
         .left-content h2 {
-            color: #e74c3c; /* 醒目的红色 */
+            color: #e74c3c;
             border-bottom: 2px solid #f0f2f5;
             padding-bottom: 15px;
             margin-top: 40px;
             margin-bottom: 25px;
             text-align: left;
             font-size: 1.8em;
-            font-weight: bold; /* 确保粗体 */
+            font-weight: bold;
         }
         .left-content > h2:first-child { margin-top: 0; }
         
-        /* 粘性导航栏遮挡修复 - 必须保留，以便平滑滚动时，标题不会被导航栏遮挡 */
+        /* 粘性导航栏遮挡修复 */
         .left-content > h2:before {
             content: ""; display: block; height: 90px; margin-top: -90px; visibility: hidden;
         }
@@ -196,7 +195,7 @@
         .game-showcase {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: center; /* 保持居中 */
             margin-bottom: 40px;
             padding: 20px;
             border: 1px solid #eee;
@@ -250,17 +249,62 @@
             font-weight: bold;
         }
 
-        /* 手机自适应 */
+        /* ==================================== 手机自适应 (优化修复) ==================================== */
         @media(max-width: 900px){
-            .content-wrapper { flex-direction: column; gap: 15px; }
-            .left-content,.right-content{ flex:100%; padding: 20px; }
-            .navbar { flex-wrap: wrap; justify-content: space-between; }
-            .search-box { order: 3; width: 100%; margin: 10px 0 0 0; }
-            .search-box input { border-radius: 20px 0 0 20px; width: calc(70% - 15px); }
-            .search-box button { border-radius: 0 20px 20px 0; width: 30%; padding: 9px 0;}
-            .navbar .studio-name { font-size: 1.3em; }
-            .dropdown-toggle { font-size: 1em; }
-            .left-content h2 { font-size: 1.5em; text-align: center; }
+            /* 整体布局调整 */
+            .content-wrapper { 
+                flex-direction: column; 
+                gap: 15px; 
+                padding: 0 10px; /* 减小侧边内边距 */
+                margin: 15px auto; /* 减小顶部边距 */
+            }
+
+            /* 导航栏换行和对齐修复 */
+            .navbar { 
+                flex-wrap: wrap; 
+                justify-content: space-between; 
+                padding: 10px 15px;
+            }
+            .navbar .studio-name { 
+                order: 1; 
+                font-size: 1.3em;
+            }
+            .dropdown { 
+                order: 2; 
+                margin-left: 10px; /* 增加与 logo 的间距 */
+            }
+            
+            /* 搜索框占据整行，并统一圆角 */
+            .search-box { 
+                order: 3; 
+                width: 100%; 
+                margin: 10px 0 0 0; /* 放置在底部，并清除左右边距 */
+            }
+            .search-box input { 
+                width: calc(100% - 40px); /* 占据剩余宽度 */
+                border-radius: 20px 0 0 20px; 
+            }
+            .search-box button { 
+                padding: 9px 15px;
+                border-radius: 0 20px 20px 0; 
+                width: 40px; /* 固定按钮宽度 */
+            }
+
+            /* 内容宽度和填充 */
+            .left-content, .right-content{ 
+                flex:100%; 
+                padding: 15px; /* 减小内边距 */
+            }
+            
+            /* 标题调整 */
+            .left-content h2 { 
+                font-size: 1.5em; 
+                text-align: center; /* 标题居中 */
+            }
+            /* 游戏展示区域居中修复 */
+            .game-showcase p {
+                text-align: left; /* 文本保持左对齐 */
+            }
         }
     </style>
 </head>
@@ -364,9 +408,8 @@
     // 音乐播放控制
     const backgroundMusic = document.getElementById('backgroundMusic');
     const playPauseButton = document.getElementById('playPauseButton');
-    let isPlaying = backgroundMusic.autoplay; // 假设 if autoplay is used
+    let isPlaying = backgroundMusic.autoplay;
 
-    // 尝试同步按钮状态和音频播放状态
     backgroundMusic.addEventListener('play', () => {
         playPauseButton.textContent = '暂停创作室主题曲';
         isPlaying = true;
@@ -380,7 +423,6 @@
         if (isPlaying) {
             backgroundMusic.pause();
         } else {
-            // 浏览器通常要求用户交互后才能播放音频
             backgroundMusic.play().catch(error => {
                 console.error("Audio play failed:", error);
                 alert("主题曲播放失败，可能需要用户交互授权。");
@@ -400,15 +442,14 @@
         dropdownIcon.classList.toggle('expanded');
     });
 
-    // ✅ 分类栏添加平滑滚动效果 (使用 JS 确保平滑，并处理粘性导航栏遮挡)
+    // 分类栏平滑滚动效果
     navLinksAnchor.forEach(link => {
         link.addEventListener('click', (e) => {
-            e.preventDefault(); // 阻止默认的快速跳转
+            e.preventDefault();
             const targetId = link.getAttribute('href');
             const targetElement = document.querySelector(targetId);
             
             if (targetElement) {
-                // 使用 scrollIntoView 实现平滑滚动
                 targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
             
@@ -431,7 +472,6 @@
 
     /* 搜索功能 - 内容高亮及滚动 */
     function clearHighlights(){
-        // 安全地替换高亮标签
         document.querySelectorAll(".highlight").forEach(el=>{ 
             el.outerHTML = el.textContent;
         });
@@ -450,12 +490,13 @@
         let found = false;
         let firstMatchElement = null;
 
-        // 遍历左侧内容区域的所有相关元素
         document.querySelectorAll(".left-content p, .left-content h2, .left-content h3, .left-content li").forEach(el=>{
-            // 临时保存元素的 HTML 结构
-            let tempElement = document.createElement('div');
-            tempElement.innerHTML = el.innerHTML;
+            let originalText = el.textContent; 
             
+            // 使用临时元素进行安全的文本替换
+            let tempDiv = document.createElement('div');
+            tempDiv.innerHTML = el.innerHTML;
+
             // 递归遍历并只替换文本节点
             function processNode(node) {
                 if (node.nodeType === 3) { // 文本节点
@@ -463,27 +504,27 @@
                     if (newText !== node.nodeValue) {
                         found = true;
                         // 创建一个临时元素来安全地解析新的 HTML 片段
-                        const tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = newText;
-                        while (tempDiv.firstChild) {
-                            node.parentNode.insertBefore(tempDiv.firstChild, node);
+                        const tempFrag = document.createElement('div');
+                        tempFrag.innerHTML = newText;
+                        while (tempFrag.firstChild) {
+                            node.parentNode.insertBefore(tempFrag.firstChild, node);
                         }
                         node.parentNode.removeChild(node);
                     }
-                } else if (node.nodeType === 1 && node.tagName !== 'SPAN') { // 元素节点，避免进入已有的 span 标签
+                } else if (node.nodeType === 1 && node.tagName !== 'SPAN') { 
                     Array.from(node.childNodes).forEach(processNode);
                 }
             }
 
             processNode(el);
 
-            if (found && !firstMatchElement) {
-                firstMatchElement = el;
+            // 仅在首次找到匹配项时设置滚动目标
+            if (found && !firstMatchElement && el.textContent.includes(originalText.replace(reg, ''))) {
+                 firstMatchElement = el;
             }
         });
 
         if(found && firstMatchElement){ 
-            // 滚动到第一个匹配的元素，使用 block: 'start' 结合 CSS 的 before 伪元素来避免导航栏遮挡
             firstMatchElement.scrollIntoView({behavior:"smooth", block:"start"});
         } else if (!found) { 
             alert("未找到内容"); 
@@ -493,7 +534,7 @@
     
     document.getElementById("searchButton").onclick = searchContent;
     
-    // ✅ 搜索后点击 Enter 键触发搜索
+    // 搜索后点击 Enter 键触发搜索
     document.getElementById("searchInput").addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             searchContent();
