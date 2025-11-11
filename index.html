@@ -12,7 +12,8 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f2f5;
             color: #333;
-            scroll-behavior: smooth; /* 启用平滑滚动效果 */
+            /* 关键的 CSS 平滑滚动，支持所有内部锚点链接（但 JS 会覆盖并提供更精确的控制） */
+            scroll-behavior: smooth; 
             overflow-x: hidden;
         }
 
@@ -153,15 +154,15 @@
         }
         .right-content h3 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; color: #3498db; }
         
-        /* ✅ 侧边栏按钮美化 (前往 Telegram) */
+        /* 侧边栏按钮美化 (前往 Telegram) */
         .right-content button {
             width: 100%;
             padding: 12px;
             font-size: 1.1em;
-            background: #3498db; /* 统一使用蓝色 */
+            background: #3498db;
             color: white;
             border: none;
-            border-radius: 30px; /* 胶囊按钮 */
+            border-radius: 30px;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
             box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
@@ -174,7 +175,7 @@
 
         /* ==================================== 内容区块样式 ==================================== */
         
-        /* ✅ 标题样式突出 */
+        /* 标题样式突出 */
         .left-content h2 {
             color: #e74c3c; /* 醒目的红色 */
             border-bottom: 2px solid #f0f2f5;
@@ -186,7 +187,8 @@
             font-weight: bold; /* 确保粗体 */
         }
         .left-content > h2:first-child { margin-top: 0; }
-        /* 粘性导航栏遮挡修复 */
+        
+        /* 粘性导航栏遮挡修复 - 必须保留，以便平滑滚动时，标题不会被导航栏遮挡 */
         .left-content > h2:before {
             content: ""; display: block; height: 90px; margin-top: -90px; visibility: hidden;
         }
@@ -201,16 +203,16 @@
             border-radius: 8px;
             transition: border-color 0.3s;
         }
-        .game-showcase:hover { border-color: #e74c3c; } /* 悬停颜色与标题一致 */
+        .game-showcase:hover { border-color: #e74c3c; }
         .game-showcase img { width: 180px; height: 180px; border-radius: 15px; object-fit: cover; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
         .game-showcase h3 { color: #3498db; margin-bottom: 15px; font-size: 1.5em; }
         
-        /* ✅ 音乐按钮美化 */
+        /* 音乐按钮美化 */
         .button-container { text-align: center; margin-bottom: 40px; }
         .music-button {
-            padding: 14px 35px; /* 按钮加大 */
-            font-size: 1.2em; /* 字体加大 */
-            background-color: #2ecc71; /* 柔和绿色 */
+            padding: 14px 35px;
+            font-size: 1.2em;
+            background-color: #2ecc71;
             color: white;
             border: none;
             border-radius: 30px;
@@ -248,7 +250,7 @@
             font-weight: bold;
         }
 
-        /* 手机自适应 (保留并微调) */
+        /* 手机自适应 */
         @media(max-width: 900px){
             .content-wrapper { flex-direction: column; gap: 15px; }
             .left-content,.right-content{ flex:100%; padding: 20px; }
@@ -359,33 +361,31 @@
     </div>
 
 <script>
-    // 音乐播放控制 (保留原逻辑)
+    // 音乐播放控制
     const backgroundMusic = document.getElementById('backgroundMusic');
     const playPauseButton = document.getElementById('playPauseButton');
-    let isPlaying = false;
-    
-    // 初始设置按钮文本
-    if (backgroundMusic.paused || backgroundMusic.ended) {
-        playPauseButton.textContent = '播放创作室主题曲';
-    } else {
+    let isPlaying = backgroundMusic.autoplay; // 假设 if autoplay is used
+
+    // 尝试同步按钮状态和音频播放状态
+    backgroundMusic.addEventListener('play', () => {
         playPauseButton.textContent = '暂停创作室主题曲';
         isPlaying = true;
-    }
+    });
+    backgroundMusic.addEventListener('pause', () => {
+        playPauseButton.textContent = '播放创作室主题曲';
+        isPlaying = false;
+    });
 
     playPauseButton.addEventListener('click', () => {
         if (isPlaying) {
             backgroundMusic.pause();
-            playPauseButton.textContent = '播放创作室主题曲';
         } else {
+            // 浏览器通常要求用户交互后才能播放音频
             backgroundMusic.play().catch(error => {
                 console.error("Audio play failed:", error);
                 alert("主题曲播放失败，可能需要用户交互授权。");
-                playPauseButton.textContent = '播放创作室主题曲'; 
-                isPlaying = false;
             });
-            playPauseButton.textContent = '暂停创作室主题曲';
         }
-        isPlaying = !isPlaying;
     });
 
     // 下拉菜单控制 (保留原逻辑)
@@ -400,16 +400,18 @@
         dropdownIcon.classList.toggle('expanded');
     });
 
-    // ✅ 分类栏添加平滑滚动效果
+    // ✅ 分类栏添加平滑滚动效果 (使用 JS 确保平滑，并处理粘性导航栏遮挡)
     navLinksAnchor.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault(); // 阻止默认的快速跳转
             const targetId = link.getAttribute('href');
             const targetElement = document.querySelector(targetId);
+            
             if (targetElement) {
-                 // 使用 scrollIntoView 实现平滑滚动
+                // 使用 scrollIntoView 实现平滑滚动
                 targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
+            
             // 关闭菜单
             navLinks.classList.remove('show');
             dropdownIcon.classList.remove('expanded');
@@ -450,26 +452,39 @@
 
         // 遍历左侧内容区域的所有相关元素
         document.querySelectorAll(".left-content p, .left-content h2, .left-content h3, .left-content li").forEach(el=>{
-            const originalHTML = el.innerHTML;
-            // 使用 textContent 避免破坏原始 HTML，例如 <h3> 里面的内容
-            const newHTML = el.textContent.replace(reg, m => `<span class="highlight">${m}</span>`);
+            // 临时保存元素的 HTML 结构
+            let tempElement = document.createElement('div');
+            tempElement.innerHTML = el.innerHTML;
             
-            if (newHTML !== el.textContent) {
-                // 如果找到匹配项，则替换并标记为已找到
-                el.innerHTML = newHTML;
-                found = true;
-                if (!firstMatchElement) {
-                    firstMatchElement = el;
+            // 递归遍历并只替换文本节点
+            function processNode(node) {
+                if (node.nodeType === 3) { // 文本节点
+                    const newText = node.nodeValue.replace(reg, m => `<span class="highlight">${m}</span>`);
+                    if (newText !== node.nodeValue) {
+                        found = true;
+                        // 创建一个临时元素来安全地解析新的 HTML 片段
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = newText;
+                        while (tempDiv.firstChild) {
+                            node.parentNode.insertBefore(tempDiv.firstChild, node);
+                        }
+                        node.parentNode.removeChild(node);
+                    }
+                } else if (node.nodeType === 1 && node.tagName !== 'SPAN') { // 元素节点，避免进入已有的 span 标签
+                    Array.from(node.childNodes).forEach(processNode);
                 }
-            } else {
-                // 还原为原始HTML，防止替换失败导致内容被清空
-                el.innerHTML = originalHTML;
+            }
+
+            processNode(el);
+
+            if (found && !firstMatchElement) {
+                firstMatchElement = el;
             }
         });
 
         if(found && firstMatchElement){ 
-            // 滚动到第一个匹配的元素
-            firstMatchElement.scrollIntoView({behavior:"smooth", block:"center"});
+            // 滚动到第一个匹配的元素，使用 block: 'start' 结合 CSS 的 before 伪元素来避免导航栏遮挡
+            firstMatchElement.scrollIntoView({behavior:"smooth", block:"start"});
         } else if (!found) { 
             alert("未找到内容"); 
         }
