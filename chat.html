@@ -71,14 +71,12 @@
         .pane{
             display:flex;
             flex-direction: column;
-            /* 关键修改 1: 移除 gap/padding，让 chat 撑满 */
             gap:0;
             padding:0;
             grid-row: 2 / 3;
             overflow: hidden; 
         }
         .sidebar{
-            /* 关键修改 2: 侧边栏在所有情况下都隐藏 */
             display: none; 
         }
         
@@ -192,54 +190,49 @@
             header h1{ font-size:18px; }
             .small{display: block;} 
             
-            /* 关键修改 3: 桌面端 pane 恢复默认布局，chat 占满整个空间 */
+            /* 关键修改 1: pane 增加顶部和侧面留白 */
             .pane{
                 flex-direction: row; 
-                gap:0; /* 移除间隙 */
-                padding: 0; /* 移除填充 */
+                gap:0; 
+                padding: 18px; /* 增加整体填充：上、下、左、右 */
+                padding-top: 18px; /* 顶部留白 */
+                padding-bottom: 18px;
             }
             .sidebar{
-                display: none; /* 明确隐藏 */
+                display: none; 
             }
             .chat{
-                flex:1; /* 确保 chat 填满剩余空间 */
-                border-radius: 0 0 10px 10px; /* 底部圆角保留，顶部直角 */
+                flex:1; 
                 background: var(--chat-bg); 
-                position: static; /* 恢复正常流布局 */
-                box-shadow: none; /* 移除上一步为了侧边栏添加的阴影 */
-                /* 确保 chat 左右两边有填充 */
-                padding: 18px; 
+                position: static; 
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* 增加阴影，使聊天框突出 */
+                border-radius: 10px; /* 聊天框四角圆角 */
+                
+                /* 关键修改 2: chat 内部填充，提供左右侧空间 */
+                padding: 0 18px; /* 左右填充，上下由内部元素控制 */
                 box-sizing: border-box; 
             }
+            .meta {
+                 padding-left: 0;
+                 padding-right: 0;
+            }
             .messages{
-                /* 调整 messages 区域以适应新的 chat 填充 */
                 flex: 1; 
-                padding: 0; /* 聊天气泡本身没有填充，由 chat 的 padding 决定 */
-                padding-bottom: 15px; 
+                /* messages 不再需要 padding，因为它应该填满 chat 的高度 */
+                padding: 15px 0; /* 垂直填充，水平填充为 0 */
                 gap:15px;
             }
-             /* 调整 footer 在桌面端的位置，使其位于 chat 底部 */
+             
             .chat footer {
                 position: static;
                 border-top: 1px solid rgba(255,255,255,.05);
-                padding:12px 0; /* 垂直填充，水平填充由 chat padding 决定 */
+                padding:12px 0; /* 垂直填充，水平填充为 0 */
                 min-height: initial; 
             }
-            /* 调整输入框和按钮的相对位置 */
-            .chat textarea {
-                min-height:56px;
-                max-height:120px;
-                resize: vertical; 
-                padding: 12px;
-                font-size: 15px;
-            }
-            .footer-btns{ gap:8px; }
-            .btn{ padding:10px 14px; font-size: initial; }
-
+            
             /* 调整聊天气泡，使其在 chat 内部居中 */
             .msg {
-                margin-left: 0;
-                margin-right: 0;
+                max-width: 95%; /* 增加最大宽度，防止内容太贴近边缘 */
             }
             .msg.user {
                 margin-left: auto;
@@ -421,7 +414,6 @@
                 const footerHeight = footerEl.offsetHeight; 
                 document.documentElement.style.setProperty('--footer-height', `${footerHeight + 15}px`); 
             } else {
-                // 桌面端 footer 已经是静态的，不需要额外的 padding-bottom，只需要底部填充
                 document.documentElement.style.setProperty('--footer-height', `15px`);
             }
             messagesEl.scrollTop = messagesEl.scrollHeight; 
