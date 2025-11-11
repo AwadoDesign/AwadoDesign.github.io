@@ -21,11 +21,10 @@
         
         /* 1. 核心修复：移动端使用 JS 动态计算的 --app-height */
         html,body{
-            height: var(--app-height); /* 使用动态高度 */
+            height: var(--app-height); 
             margin:0;
             padding: 0;
             font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* 移除 body 上的 overflow: hidden，让浏览器自行处理键盘弹出时的滚动 */
         }
         body{
             background:var(--awado-bg);
@@ -38,13 +37,13 @@
         .app{
             width: 100%; 
             max-width: none; 
-            height: var(--app-height); /* 使用动态高度 */
+            height: var(--app-height); 
             background:var(--awado-card);
             border-radius:0; 
             box-shadow:none; 
             display:grid;
-            grid-template-rows:60px 1fr; /* 头部高度减小到 60px */
-            overflow:hidden; /* app 内部内容溢出隐藏，交给 chat 处理 */
+            grid-template-rows:60px 1fr; 
+            overflow:hidden; 
         }
         
         /* ==================== 头部（Header） ==================== */
@@ -77,7 +76,7 @@
             overflow: hidden; 
         }
         .sidebar{
-            display: none; 
+            display: none; /* 手机端始终隐藏 */
         }
         
         .chat{
@@ -103,7 +102,6 @@
             gap:12px;
         }
         .messages::-webkit-scrollbar {width: 0;} 
-        .messages::-webkit-scrollbar-thumb {background-color: transparent;}
         
         .msg{
             max-width:90%; 
@@ -143,13 +141,13 @@
             min-height: var(--footer-height); 
             box-sizing: border-box; 
             flex-shrink: 0;
-            z-index: 10; /* 确保在消息气泡之上 */
+            z-index: 10; 
         }
         textarea{
             flex:1;
             min-height:48px;
             max-height:100px;
-            resize: none; /* 关键：确保手机端不能拖动 */
+            resize: none; 
             padding:10px;
             border-radius:8px;
             background:#333; 
@@ -184,7 +182,7 @@
                 border-radius:12px;
                 box-shadow:0 8px 30px rgba(0,0,0,.5);
                 grid-template-rows:72px 1fr;
-                height: 720px; /* 桌面端使用固定像素高度 */
+                height: 720px; 
             }
             header{ padding: 14px 18px; height: 72px; }
             header .logo{ width:40px; height:40px; }
@@ -196,7 +194,7 @@
                 padding:18px;
             }
             .sidebar{
-                display: block; 
+                display: block; /* 桌面端恢复显示 */
                 width:240px;
                 align-self: stretch;
                 padding: 15px;
@@ -271,13 +269,7 @@
             <section class="chat">
                 <div class="meta">会话历史 — 本系统不会保存您的聊天记录。</div>
                 <div id="messages" class="messages" aria-live="polite">
-                    <div class="msg ai">
-                        <div style="font-size:13px;color:var(--awado-green);margin-bottom:6px">AWaDo 机器人</div>
-                        <div>
-                            欢迎来到 AWaDo 聊天机器人！我是基于预设规则的助手。请问您有什么想了解的 AWaDo 工作室信息吗？
-                        </div>
                     </div>
-                </div>
 
                 <footer>
                     <textarea id="input" placeholder="输入您的问题（Enter 发送）"></textarea>
@@ -298,7 +290,28 @@
         const footerEl = document.querySelector('footer');
 
         // ===============================================
-        // 核心规则：关键词匹配
+        // 机器人初始消息内容 (整合了侧边栏信息)
+        // ===============================================
+        const initialAiMessage = `
+            欢迎来到 AWaDo 聊天机器人！我是基于预设规则的助手。请问您有什么想了解的 AWaDo 工作室信息吗？
+
+            ---
+            
+            **💡 工作原理：**
+            1. 本系统在浏览器端运行，不依赖任何外部 API。
+            2. 机器人通过关键词匹配来回复预设的答案。
+            3. 如果您询问超出预设规则的问题，它将回复默认信息。
+
+            **⭐ 您可以尝试问：**
+            - 卡皮巴拉（游戏名）
+            - 成员列表
+            - 主题曲
+            - 你好 / 谢谢
+            
+        `;
+
+        // ===============================================
+        // 核心规则：关键词匹配 (保持不变)
         // ===============================================
         const rules = [
             {
@@ -320,7 +333,9 @@
             {
                 keywords: ['谢谢', '感谢', '再见','tq'],
                 response: '不客气！希望您在 AWaDo 的网站上玩得愉快。再见，祝您拥有美好的一天！'
-            },
+            }
+            // 保持您的特色规则
+            ,
             {
                 keywords: ['联系', 'Telegram', 'TG'],
                 response: '您可以通过点击主页侧边栏的“前往 Telegram”按钮联系我们，提供反馈或寻求支持。'
@@ -330,25 +345,31 @@
                 response: '我不是gay，但ruitao是。'
             },
             {
-                keywords: ['ruitao', 'sangyuan', 'leongyi','qinghua','shusheng'],
+                keywords: ['ruitao', 'sangyuan', 'leongyi','qinghua','shusheng','yuheng'],
                 response: '是gay。'
             }
         ];
 
-        // 默认回复
         const defaultResponse = '抱歉，我只是一名规则机器人，无法理解您复杂的问题。';
 
 
         function addMessage(role, text){
             const div = document.createElement('div');
             div.className = 'msg ' + (role==='user'?'user':'ai');
+            // 将 Markdown 风格的 **粗体** 和 --- 分隔符转换为 HTML
+            const formattedText = escapeHtml(text)
+                                    .replace(/\n/g, '<br>')
+                                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                                    .replace(/---/g, '<hr style="border:0; border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0;">');
+
             div.innerHTML = '<div style="font-size:13px; margin-bottom:6px">'+(role==='user'? '你':'AWaDo 机器人')+'</div>' +
-                            '<div>' + escapeHtml(text).replace(/\n/g,'<br>') + '</div>';
+                            '<div>' + formattedText + '</div>';
             messagesEl.appendChild(div);
             messagesEl.scrollTop = messagesEl.scrollHeight; 
         }
 
         function escapeHtml(unsafe){
+            // 此函数仅用于基本的 HTML 实体转义
             return unsafe
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
@@ -386,40 +407,44 @@
         // ===============================================
         // 移动端高度/滚动修复函数
         // ===============================================
-        
-        // 修复 iOS/Android 浏览器 100vh 错误计算的函数
         const setAppHeight = () => {
+            // 仅在窄屏下修复 vh
             if (window.innerWidth < 600) {
                 const doc = document.documentElement;
-                // 获取当前视口高度，并将其设置为 CSS 变量
                 doc.style.setProperty('--app-height', `${window.innerHeight}px`);
             } else {
-                // 桌面端保持默认
                 document.documentElement.style.setProperty('--app-height', `720px`);
             }
         };
 
-        // 调整消息区域填充的函数
         const adjustMessagesPadding = () => {
             if (window.innerWidth < 600) {
-                // 动态获取 footer 实际高度
                 const footerHeight = footerEl.offsetHeight; 
-                // 设置 CSS 变量，确保 messages 容器底部有足够的空间
                 document.documentElement.style.setProperty('--footer-height', `${footerHeight + 15}px`); 
             } else {
-                // 桌面端恢复默认值
                 document.documentElement.style.setProperty('--footer-height', `15px`);
             }
-            messagesEl.scrollTop = messagesEl.scrollHeight; // 重新滚动到底部
+            messagesEl.scrollTop = messagesEl.scrollHeight; 
         };
-
+        
+        // ===============================================
+        // 初始化函数
+        // ===============================================
+        function initializeChat() {
+            setAppHeight();
+            adjustMessagesPadding();
+            // 注入包含信息的欢迎语
+            addMessage('ai', initialAiMessage);
+        }
 
         // 事件监听
         sendBtn.addEventListener('click', sendMessage);
+        
         clearBtn.addEventListener('click', () => { 
             messagesEl.innerHTML=''; 
             inputEl.value=''; 
-            addMessage('ai', '欢迎来到 AWaDo 聊天机器人！我是基于预设规则的助手。请问您有什么想了解的 AWaDo 工作室信息吗？');
+            // 清空时重新发送包含信息的欢迎语
+            addMessage('ai', initialAiMessage);
         });
 
         inputEl.addEventListener('keydown', (e)=>{
@@ -428,26 +453,19 @@
             }
         });
         
-        // 监听窗口大小变化和输入框内容变化
         window.addEventListener('resize', () => {
-            setAppHeight(); // 调整应用高度（修复 iOS/Android）
-            adjustMessagesPadding(); // 调整消息区填充
+            setAppHeight(); 
+            adjustMessagesPadding(); 
         });
 
-        // 监听输入框高度变化，确保 padding 总是适配
         inputEl.addEventListener('input', adjustMessagesPadding);
         
-        // 页面加载完成后立即执行
-        window.onload = () => {
-            setAppHeight();
-            adjustMessagesPadding();
-        };
+        window.onload = initializeChat;
 
-        // 键盘弹出后，确保滚动到底部
         inputEl.addEventListener('focus', () => {
             setTimeout(() => {
                 messagesEl.scrollTop = messagesEl.scrollHeight;
-            }, 300); // 延迟执行，等待虚拟键盘完全弹出
+            }, 300); 
         });
 
     </script>
