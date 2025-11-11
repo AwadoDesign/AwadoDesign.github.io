@@ -6,6 +6,22 @@
     <title>AWaDo Design</title>
     <link rel="icon" href="awado_icon.png" type="image/png">
     <style>
+        /* ==================================== 字体定义与应用（新增部分） ==================================== */
+        @font-face {
+            font-family: 'AWD-Title-Font'; /* 自定义一个字体名称 */
+            src: url('awd_font.ttf') format('truetype'); /* 确保 awd_font.ttf 文件与此 HTML 文件在同一目录下 */
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* 将新字体应用到指定标题 */
+        .left-content h2, /* 工作室主题曲, 我们的游戏, 游戏开发过程, 工作室成员, 用户评论区 */
+        .game-showcase h3 /* 卡皮巴拉环游世界 */
+        {
+            font-family: 'AWD-Title-Font', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            letter-spacing: 1.5px; /* 稍微增加间距以增强新字体效果 */
+        }
+
         /* ==================================== 基础样式 ==================================== */
         body {
             margin: 0;
@@ -226,8 +242,8 @@
         /* 关键修复：限制 bg_ing.jpg 的尺寸 */
         .development-process img {
             max-width: 100%; 
-            height: auto;    
-            display: block;  
+            height: auto;   
+            display: block; 
             border-radius: 8px;
             margin-bottom: 20px;
         }
