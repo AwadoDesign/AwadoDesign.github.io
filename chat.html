@@ -16,15 +16,16 @@
             --awado-red: #e74c3c; 
             --awado-blue: #3498db; 
             --footer-height: 80px; /* 预估底部输入框高度 */
+            --app-height: 100vh; /* JS 动态计算的视口高度 */
         }
         
-        /* 1. 核心修复：移动端使用 vh 确保全屏，移除所有默认边距 */
+        /* 1. 核心修复：移动端使用 JS 动态计算的 --app-height */
         html,body{
-            height: 100vh; /* 确保占据视口全高 */
+            height: var(--app-height); /* 使用动态高度 */
             margin:0;
             padding: 0;
             font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden; /* 防止整个页面滚动 */
+            /* 移除 body 上的 overflow: hidden，让浏览器自行处理键盘弹出时的滚动 */
         }
         body{
             background:var(--awado-bg);
@@ -37,13 +38,13 @@
         .app{
             width: 100%; 
             max-width: none; 
-            height: 100vh; 
+            height: var(--app-height); /* 使用动态高度 */
             background:var(--awado-card);
             border-radius:0; 
             box-shadow:none; 
             display:grid;
             grid-template-rows:60px 1fr; /* 头部高度减小到 60px */
-            overflow:hidden;
+            overflow:hidden; /* app 内部内容溢出隐藏，交给 chat 处理 */
         }
         
         /* ==================== 头部（Header） ==================== */
@@ -64,7 +65,7 @@
         header h1{font-size:16px;margin:0;color:var(--awado-red);font-weight:600;} 
         .controls{margin-left:auto;} 
         .controls select { display: none; }
-        .small{display: none;} /* 手机端隐藏次要信息 */
+        .small{display: none;} 
 
         /* ==================== 主面板（Pane） ==================== */
         .pane{
@@ -79,7 +80,6 @@
             display: none; 
         }
         
-        /* CHAT 区域：占据 pane 剩余空间，并用于相对定位 footer */
         .chat{
             flex:1;
             background:#0b1220; 
@@ -87,23 +87,22 @@
             border-radius:0; 
             display:flex;
             flex-direction:column;
-            position: relative; /* 关键：用于绝对定位 footer */
+            position: relative; 
             overflow: hidden; 
         }
         
         /* ==================== 消息区（Messages）- 核心滚动区域 ==================== */
         .messages{
-            /* 关键：使用 padding-bottom 预留出 footer 的空间 */
             padding:15px; 
             padding-bottom: var(--footer-height); /* 预留底部输入框空间 */
             overflow-y:auto; 
-            -webkit-overflow-scrolling: touch; /* 提高iOS滚动流畅度 */
-            flex:1; /* 占据剩余空间 */
+            -webkit-overflow-scrolling: touch; 
+            flex:1; 
             display:flex;
             flex-direction:column;
             gap:12px;
         }
-        .messages::-webkit-scrollbar {width: 0;} /* 手机端隐藏滚动条 */
+        .messages::-webkit-scrollbar {width: 0;} 
         .messages::-webkit-scrollbar-thumb {background-color: transparent;}
         
         .msg{
@@ -115,7 +114,6 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.1)
         }
         
-        /* 消息样式不变 */
         .msg.user{ margin-left:auto; background:linear-gradient(135deg,var(--awado-blue),#2980b9); color:white; border:1px solid rgba(52,152,219,.15); }
         .msg.ai{ margin-right:auto; background:linear-gradient(135deg,#1f3d33,#0b2d23); color:var(--awado-text); border:1px solid rgba(46,204,113,.15); }
         .msg > div:first-child{font-weight: bold; margin-bottom: 3px; font-size: 12px;}
@@ -132,7 +130,7 @@
         
         /* ==================== 底部（Footer） - 绝对定位固定底部 ==================== */
         footer{
-            position: absolute; /* 关键：固定在 chat 容器底部 */
+            position: absolute; 
             bottom: 0;
             left: 0;
             right: 0;
@@ -142,16 +140,16 @@
             border-top:1px solid rgba(255,255,255,.05);
             align-items:flex-end;
             background-color: #2c2c2c;
-            /* 关键：通过 JS 动态调整此高度，但此处先保持最小高度 */
             min-height: var(--footer-height); 
             box-sizing: border-box; 
             flex-shrink: 0;
+            z-index: 10; /* 确保在消息气泡之上 */
         }
         textarea{
             flex:1;
             min-height:48px;
             max-height:100px;
-            resize: none; 
+            resize: none; /* 关键：确保手机端不能拖动 */
             padding:10px;
             border-radius:8px;
             background:#333; 
@@ -178,7 +176,6 @@
             body {
                 align-items: center; 
                 padding: 24px;
-                overflow: auto; /* 桌面端允许 body 滚动，但 app 不滚动 */
             }
             .app{
                 width:900px;
@@ -187,6 +184,7 @@
                 border-radius:12px;
                 box-shadow:0 8px 30px rgba(0,0,0,.5);
                 grid-template-rows:72px 1fr;
+                height: 720px; /* 桌面端使用固定像素高度 */
             }
             header{ padding: 14px 18px; height: 72px; }
             header .logo{ width:40px; height:40px; }
@@ -206,10 +204,10 @@
             }
             .chat{
                 border-radius:10px;
-                position: static; /* 恢复静态定位 */
+                position: static; 
             }
             .messages{
-                flex: 1; /* 恢复 flex 布局的 flex: 1 */
+                flex: 1; 
                 padding:15px 10px;
                 padding-bottom: 15px; /* 移除底部填充 */
                 gap:15px;
@@ -222,7 +220,7 @@
                 font-size: 15px;
             }
             footer{
-                position: static; /* 恢复静态定位 */
+                position: static; 
                 padding:12px 15px;
                 gap: 10px;
                 min-height: initial; 
@@ -388,8 +386,21 @@
         // ===============================================
         // 移动端高度/滚动修复函数
         // ===============================================
-        function adjustMessagesPadding() {
-            // 只有在屏幕宽度小于 600px 时才进行调整
+        
+        // 修复 iOS/Android 浏览器 100vh 错误计算的函数
+        const setAppHeight = () => {
+            if (window.innerWidth < 600) {
+                const doc = document.documentElement;
+                // 获取当前视口高度，并将其设置为 CSS 变量
+                doc.style.setProperty('--app-height', `${window.innerHeight}px`);
+            } else {
+                // 桌面端保持默认
+                document.documentElement.style.setProperty('--app-height', `720px`);
+            }
+        };
+
+        // 调整消息区域填充的函数
+        const adjustMessagesPadding = () => {
             if (window.innerWidth < 600) {
                 // 动态获取 footer 实际高度
                 const footerHeight = footerEl.offsetHeight; 
@@ -400,7 +411,7 @@
                 document.documentElement.style.setProperty('--footer-height', `15px`);
             }
             messagesEl.scrollTop = messagesEl.scrollHeight; // 重新滚动到底部
-        }
+        };
 
 
         // 事件监听
@@ -417,14 +428,28 @@
             }
         });
         
-        // 监听窗口大小变化和输入框内容变化（可能会改变 footer 高度）
-        window.addEventListener('resize', adjustMessagesPadding);
-        
+        // 监听窗口大小变化和输入框内容变化
+        window.addEventListener('resize', () => {
+            setAppHeight(); // 调整应用高度（修复 iOS/Android）
+            adjustMessagesPadding(); // 调整消息区填充
+        });
+
         // 监听输入框高度变化，确保 padding 总是适配
         inputEl.addEventListener('input', adjustMessagesPadding);
         
-        // 页面加载完成后立即执行一次
-        window.onload = adjustMessagesPadding;
+        // 页面加载完成后立即执行
+        window.onload = () => {
+            setAppHeight();
+            adjustMessagesPadding();
+        };
+
+        // 键盘弹出后，确保滚动到底部
+        inputEl.addEventListener('focus', () => {
+            setTimeout(() => {
+                messagesEl.scrollTop = messagesEl.scrollHeight;
+            }, 300); // 延迟执行，等待虚拟键盘完全弹出
+        });
+
     </script>
 </body>
 </html>
