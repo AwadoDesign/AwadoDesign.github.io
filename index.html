@@ -11,7 +11,7 @@
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             color: #333;
-            scroll-behavior: smooth; /* 启用平滑滚动效果 */
+            scroll-behavior: smooth;
         }
         .header {
             background-image: url('ct_room.jpg');
@@ -28,7 +28,6 @@
             font-size: 3em;
             margin: 0;
         }
-        /* 导航栏样式 */
         .navbar {
             background-color: rgba(0, 0, 0, 0.85);
             padding: 10px 20px;
@@ -39,7 +38,7 @@
             z-index: 1000;
         }
         .navbar .logo {
-            height: 45px; /* <<<< 图标调大 */
+            height: 45px;
             margin-right: 15px;
         }
         .navbar .studio-name {
@@ -47,12 +46,12 @@
             font-size: 1.5em;
             font-weight: bold;
             text-decoration: none;
-            margin-right: auto; /* 推开右侧的搜索和菜单 */
+            margin-right: auto;
         }
 
         /* --- 搜索框样式开始 --- */
         .search-box {
-            margin-right: 20px; /* 在搜索框和“分类”之间留出空间 */
+            margin-right: 20px;
             display: flex;
             align-items: center;
         }
@@ -60,10 +59,10 @@
         .search-box input {
             padding: 8px 10px;
             border: 1px solid #ccc;
-            border-radius: 4px 0 0 4px; /* 左侧圆角 */
+            border-radius: 4px 0 0 4px;
             font-size: 1em;
             outline: none;
-            width: 150px; /* 调整输入框宽度 */
+            width: 150px;
         }
 
         .search-box button {
@@ -71,7 +70,7 @@
             background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 0 4px 4px 0; /* 右侧圆角 */
+            border-radius: 0 4px 4px 0;
             cursor: pointer;
             font-size: 1em;
             transition: background-color 0.3s;
@@ -107,22 +106,20 @@
             transition: transform 0.3s ease;
         }
 
-        /* 初始状态：▶ (向右的箭头) */
         .dropdown-icon.collapsed {
             border-width: 5px 0 5px 8px;
             border-color: transparent transparent transparent white;
         }
 
-        /* 展开状态：▼ (向下的箭头) */
         .dropdown-icon.expanded {
             border-width: 8px 5px 0 5px;
             border-color: white transparent transparent transparent;
         }
 
         .nav-links {
-            display: none; /* 默认隐藏 */
+            display: none;
             position: absolute;
-            top: 100%; /* 放在切换按钮下方 */
+            top: 100%;
             right: 0;
             background-color: rgba(0, 0, 0, 0.9);
             min-width: 150px;
@@ -133,7 +130,7 @@
         }
 
         .nav-links.show {
-            display: block; /* 通过JS控制显示 */
+            display: block;
         }
 
         .nav-links a {
@@ -148,9 +145,7 @@
         .nav-links a:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
-        /* --- 结束 下拉导航菜单样式 --- */
 
-        /* 内容区和通用样式 */
         .content-section {
             background-color: white;
             padding: 40px 20px;
@@ -159,13 +154,11 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
-        
-        /* 粘性导航栏遮挡修复 */
         .content-section > h2:before {
             content: "";
             display: block;
-            height: 90px; /* <<<< 适应增高后的导航栏 */
-            margin-top: -90px; /* <<<< 适应增高后的导航栏 */
+            height: 90px;
+            margin-top: -90px;
             visibility: hidden;
         }
         .content-section h2 {
@@ -174,8 +167,7 @@
             margin-bottom: 30px;
             color: #007bff;
         }
-        
-        /* Utterances 容器样式 */
+
         .comments-container {
             padding-top: 40px;
             border-top: 1px solid #eee;
@@ -193,6 +185,13 @@
         .member-list { list-style-type: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
         .member-list li { background-color: #e9ecef; padding: 10px 20px; border-radius: 5px; font-weight: bold; color: #495057; }
         audio { display: none; }
+
+        /* ✅ 搜索高亮样式 */
+        .highlight {
+            background: yellow;
+            color: black;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -323,7 +322,6 @@
 
         navLinksAnchor.forEach(link => {
             link.addEventListener('click', () => {
-                // 关闭菜单
                 navLinks.classList.remove('show');
                 dropdownIcon.classList.remove('expanded');
                 dropdownIcon.classList.add('collapsed');
@@ -331,7 +329,6 @@
         });
 
         document.addEventListener('click', (event) => {
-            // 检查点击是否发生在菜单外部
             if (!dropdownToggle.contains(event.target) && !navLinks.contains(event.target)) {
                 if (navLinks.classList.contains('show')) {
                     navLinks.classList.remove('show');
@@ -341,21 +338,54 @@
             }
         });
 
-        // 搜索功能 JS 交互添加
+        // ✅ 站内搜索功能
         const searchInput = document.getElementById('searchInput');
         const searchButton = document.getElementById('searchButton');
 
-        searchButton.addEventListener('click', () => {
+        function clearHighlights() {
+            const highlights = document.querySelectorAll(".highlight");
+            highlights.forEach(el => {
+                el.outerHTML = el.innerText;
+            });
+        }
+
+        function searchContent() {
+            clearHighlights();
             const query = searchInput.value.trim();
-            if (query) {
-                // 这里可以添加实际的搜索逻辑，目前只是一个弹窗提示
-                alert(`您尝试搜索："${query}"。此功能目前仅为演示，实际搜索逻辑待开发。`);
-                // 清空输入框
-                searchInput.value = '';
-            } else {
-                alert('请输入搜索关键字。');
+            if (!query) {
+                alert("请输入搜索关键字。");
+                return;
+            }
+            
+            const regex = new RegExp(query, "gi");
+            let found = false;
+
+            document.querySelectorAll("p, h2, li, h3").forEach(el => {
+                if (regex.test(el.innerText)) {
+                    found = true;
+                    el.innerHTML = el.innerHTML.replace(
+                        regex,
+                        match => `<span class="highlight">${match}</span>`
+                    );
+                    el.scrollIntoView({behavior: "smooth", block: "center"});
+                }
+            });
+
+            if (!found) {
+                alert("未找到相关内容。");
+            }
+
+            searchInput.value = "";
+        }
+
+        searchButton.addEventListener('click', searchContent);
+
+        searchInput.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                searchContent();
             }
         });
+
     </script>
 
 </body>
