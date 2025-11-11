@@ -1,220 +1,375 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>本地 AI 聊天演示</title>
-  <style>
-    :root{--bg:#0f1724;--card:#0b1220;--muted:#9aa4b2;--accent:#7cdbb6}
-    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial}
-    body{background:linear-gradient(180deg,#071226 0%, #011221 100%);color:#e6eef6;display:flex;align-items:center;justify-content:center;padding:24px}
-    .app{width:900px;max-width:95%;height:720px;background:var(--card);border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,.6);display:grid;grid-template-rows:72px 1fr 96px;overflow:hidden}
-    header{display:flex;gap:12px;align-items:center;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.03)}
-    header h1{font-size:16px;margin:0;color:#dff7ee}
-    .controls{margin-left:auto;display:flex;gap:8px;align-items:center}
-    .controls input,.controls select{background:transparent;border:1px solid rgba(255,255,255,.06);color:var(--muted);padding:6px 8px;border-radius:8px;font-size:13px}
-    .pane{display:flex;gap:12px;padding:18px}
-    .sidebar{width:240px;background:linear-gradient(180deg, rgba(255,255,255,.02), transparent);padding:12px;border-radius:8px}
-    .sidebar .note{font-size:13px;color:var(--muted);line-height:1.4}
-    .chat{flex:1;background:linear-gradient(180deg, rgba(255,255,255,.01), transparent);padding:12px;border-radius:8px;display:flex;flex-direction:column}
-    .messages{flex:1;overflow:auto;padding:8px 4px;display:flex;flex-direction:column;gap:10px}
-    .msg{max-width:78%;padding:10px 12px;border-radius:10px;line-height:1.45}
-    .msg.user{margin-left:auto;background:linear-gradient(180deg,#0f2533,#09202b);border:1px solid rgba(124,219,182,.06)}
-    .msg.ai{margin-right:auto;background:linear-gradient(180deg,#0b1a2a,#06141d);border:1px solid rgba(255,255,255,.03)}
-    .meta{font-size:12px;color:var(--muted);padding:8px 12px}
-    footer{display:flex;gap:8px;padding:12px;border-top:1px solid rgba(255,255,255,.02);align-items:center}
-    textarea{flex:1;min-height:56px;max-height:160px;resize:none;padding:12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,.04);color:#e6eef6;font-size:15px}
-    .btn{padding:10px 14px;background:linear-gradient(90deg,var(--accent),#55c4a0);color:#032017;border:none;border-radius:10px;font-weight:600;cursor:pointer}
-    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,.04);color:var(--muted)}
-    .small{font-size:13px;color:var(--muted)}
-    .top-row{display:flex;gap:8px;align-items:center}
-    .key-toggle{display:flex;gap:6px;align-items:center}
-    .saved{font-size:12px;color:#8bd8be;margin-left:6px}
-    .footer-right{display:flex;gap:8px;align-items:center}
-    .system-box{width:100%;padding:8px;border-radius:8px;background:rgba(255,255,255,.01);border:1px dashed rgba(255,255,255,.03);color:var(--muted);font-size:13px}
-  </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AWaDo AI 智能助手</title>
+    <style>
+        /* AWaDo 品牌配色与基础设置 */
+        :root{
+            --awado-bg: #0f1724; /* 深蓝背景 */
+            --awado-card: #1e1e1e; /* 导航栏/卡片深色 */
+            --awado-text: #e6eef6; /* 主文本颜色 */
+            --awado-muted: #9aa4b2; /* 次要文本颜色 */
+            --awado-green: #2ecc71; /* 强调色 1: 绿色 (主题曲按钮色) */
+            --awado-red: #e74c3c; /* 强调色 2: 红色 (搜索/标题色) */
+            --awado-blue: #3498db; /* 强调色 3: 蓝色 (TG按钮色) */
+        }
+        html,body{height:100%;margin:0;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+        body{
+            background:var(--awado-bg);
+            color:var(--awado-text);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:24px
+        }
+        .app{
+            width:900px;
+            max-width:95%;
+            height:720px;
+            background:var(--awado-card);
+            border-radius:12px;
+            box-shadow:0 8px 30px rgba(0,0,0,.5);
+            display:grid;
+            grid-template-rows:72px 1fr 1fr; 
+            overflow:hidden
+        }
+        
+        /* ==================== 头部（Header） ==================== */
+        header{
+            display:flex;
+            gap:12px;
+            align-items:center;
+            padding:14px 18px;
+            border-bottom:1px solid rgba(255,255,255,.05);
+            background-color: #2c2c2c; /* 略浅一点的头部 */
+        }
+        header .logo{
+            width:40px;
+            height:40px;
+            border-radius:8px;
+            object-fit: contain;
+        }
+        header h1{font-size:18px;margin:0;color:var(--awado-red);font-weight:600;}
+        .controls{margin-left:auto;display:flex;gap:8px;align-items:center}
+        .controls select{
+            background:#333;
+            border:1px solid rgba(255,255,255,.1);
+            color:var(--awado-muted);
+            padding:6px 8px;
+            border-radius:6px;
+            font-size:13px
+        }
+        .small{font-size:13px;color:var(--awado-muted)}
+        .saved{font-size:12px;color:var(--awado-green);margin-left:6px} /* 此版本中已隐藏 */
+
+        /* ==================== 主面板（Pane） ==================== */
+        .pane{display:flex;gap:18px;padding:18px;grid-row: 2 / 4;}
+        .sidebar{
+            width:240px;
+            background:rgba(255,255,255,.03);
+            padding:15px;
+            border-radius:10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            align-self: flex-start;
+        }
+        .sidebar .note{font-size:13px;color:var(--awado-muted);line-height:1.6}
+        .sidebar li{margin-bottom: 5px; color: var(--awado-muted);}
+        
+        .chat{
+            flex:1;
+            background:#0b1220; 
+            padding:0; 
+            border-radius:10px;
+            display:flex;
+            flex-direction:column;
+            overflow: hidden; 
+        }
+        
+        /* ==================== 消息区（Messages） ==================== */
+        .messages{flex:1;overflow-y:auto;padding:15px 10px;display:flex;flex-direction:column;gap:15px}
+        .messages::-webkit-scrollbar {width: 8px;}
+        .messages::-webkit-scrollbar-thumb {background-color: rgba(255, 255, 255, 0.15);border-radius: 4px;}
+        
+        .msg{max-width:85%;padding:12px 15px;border-radius:12px;line-height:1.5;box-shadow: 0 1px 3px rgba(0,0,0,0.1)}
+        
+        /* 用户消息 (使用蓝色渐变) */
+        .msg.user{
+            margin-left:auto;
+            background:linear-gradient(135deg,var(--awado-blue),#2980b9);
+            color:white;
+            border:1px solid rgba(52,152,219,.15);
+        }
+        /* AI 消息 (使用绿色强调色) */
+        .msg.ai{
+            margin-right:auto;
+            background:linear-gradient(135deg,#1f3d33,#0b2d23);
+            color:var(--awado-text);
+            border:1px solid rgba(46,204,113,.15);
+        }
+        .msg > div:first-child{font-weight: bold; margin-bottom: 4px; font-size: 13px;}
+        .msg.user > div:first-child{color: rgba(255,255,255,0.8);}
+        .msg.ai > div:first-child{color: var(--awado-green);}
+
+        .meta{font-size:12px;color:var(--awado-muted);padding:8px 12px;border-bottom: 1px dashed rgba(255,255,255,.03);}
+        
+        /* ==================== 底部（Footer） ==================== */
+        footer{
+            display:flex;
+            gap:10px;
+            padding:12px 15px;
+            border-top:1px solid rgba(255,255,255,.05);
+            align-items:center;
+            background-color: #2c2c2c;
+        }
+        textarea{
+            flex:1;
+            min-height:56px;
+            max-height:120px;
+            resize:vertical;
+            padding:12px;
+            border-radius:10px;
+            background:#333; 
+            border:1px solid rgba(255,255,255,.1);
+            color:var(--awado-text);
+            font-size:15px;
+            transition: border-color 0.2s;
+        }
+        textarea:focus { border-color: var(--awado-green); outline: none; }
+        
+        .btn{
+            padding:10px 14px;
+            background:linear-gradient(90deg,var(--awado-green),#27ae60);
+            color:#032017;
+            border:none;
+            border-radius:10px;
+            font-weight:600;
+            cursor:pointer;
+            box-shadow: 0 2px 5px rgba(46, 204, 113, 0.3);
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn:active { transform: translateY(1px); }
+
+        .btn.secondary{
+            background:#444;
+            border:1px solid #555;
+            color:var(--awado-muted);
+            box-shadow: none;
+        }
+        .btn.secondary:hover { background: #555; opacity: 1; }
+
+        .system-box{
+            width:100%;
+            padding:8px;
+            border-radius:8px;
+            background:rgba(255,255,255,.05);
+            border:1px dashed var(--awado-red); 
+            color:var(--awado-muted);
+            font-size:13px;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
-  <div class="app" role="application">
-    <header>
-      <img src="" alt="logo" style="width:40px;height:40px;border-radius:8px;background:linear-gradient(45deg,#7cdbb6,#5fb5a0)">
-      <div>
-        <h1>本地 AI 聊天（演示）</h1>
-        <div class="small">注意：将 API Key 存在本地仅用于测试；生产环境请用后端代理。</div>
-      </div>
-      <div class="controls">
-        <input id="apiKey" placeholder="输入 OpenAI API Key（sk-...）" style="min-width:280px" />
-        <select id="model">
-          <option value="gpt-4o-mini">gpt-4o-mini</option>
-          <option value="gpt-4o">gpt-4o</option>
-          <option value="gpt-5-mini">gpt-5-mini</option>
-          <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
-        </select>
-      </div>
-    </header>
+    <div class="app" role="application">
+        <header>
+            <img src="awado_icon.png" alt="AWaDo AI Logo" class="logo"> 
+            <div>
+                <h1>AWaDo 智能设计助理</h1>
+                <div class="small">由 AWaDo Design Studio 提供支持，已配置专属 API Key。</div>
+            </div>
+            <div class="controls">
+                <select id="model">
+                    <option value="gpt-4o-mini">gpt-4o-mini</option>
+                    <option value="gpt-4o">gpt-4o</option>
+                    <option value="gpt-5-mini">gpt-5-mini</option>
+                    <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+                </select>
+            </div>
+        </header>
 
-    <div class="pane">
-      <aside class="sidebar">
-        <div class="note">快速说明：
-          <ul>
-            <li>把你的 OpenAI API Key 粘贴到上方输入框并保存（只保存在本地）。</li>
-            <li>点击发送与模型对话。若提示 CORS 或 401，请使用后端代理。</li>
-            <li>为了安全，示例不会把 key 上传到任何服务器。</li>
-          </ul>
+        <div class="pane">
+            <aside class="sidebar">
+                <div class="note">
+                    <p style="color:var(--awado-red); font-weight: 600; margin-top: 0;">AWaDo AI 助手简介:</p>
+                    <ul style="padding-left: 20px; margin-top: 0;">
+                        <li>专注于 AWaDo 工作室的游戏、设计和开发流程。</li>
+                        <li>可以查询项目信息或获取通用 AI 帮助。</li>
+                        <li>**API Key 已预设**，用户无需输入，直接开始聊天。</li>
+                    </ul>
+                </div>
+
+                <div style="margin-top:18px">
+                    <div class="small" style="color:var(--awado-text);">系统提示（System）：</div>
+                    <textarea id="systemPrompt" class="system-box" rows="4" 
+                              placeholder="例如：你是一个友善的中文游戏开发助手，回答应与卡皮巴拉一样治愈。"
+                    >你是一个友善、专业的 AWaDo Design Studio 智能助理，回答应与卡皮巴拉一样治愈且富有创意，专注于游戏开发、设计和工作室信息。请用中文回答。</textarea>
+                </div>
+            </aside>
+
+            <section class="chat">
+                <div class="meta">会话历史 — 请在左侧设置您的专属 AI 身份。</div>
+                <div id="messages" class="messages" aria-live="polite">
+                    <div class="msg ai">
+                        <div style="font-size:13px;color:var(--awado-green);margin-bottom:6px">AWaDo AI</div>
+                        <div>
+                            欢迎来到 AWaDo 智能设计助理！我是您的专属助手，可以为您解答关于我们工作室、游戏项目（比如《卡皮巴拉环游世界》）或通用开发问题。请问有什么可以帮到您呢？
+                        </div>
+                    </div>
+                </div>
+
+                <footer>
+                    <textarea id="input" placeholder="输入您的问题（Shift+Enter 换行）"></textarea>
+                    <div style="display:flex;flex-direction:column;gap:8px;">
+                        <button id="sendBtn" class="btn">发送</button>
+                        <button id="clearBtn" class="btn secondary">清空</button>
+                    </div>
+                </footer>
+            </section>
         </div>
-
-        <div style="margin-top:12px">
-          <div class="small">系统提示（System）：</div>
-          <textarea id="systemPrompt" class="system-box" rows="4" placeholder="例如：你是温和的中文助手，回答尽量简洁。"></textarea>
-        </div>
-      </aside>
-
-      <section class="chat">
-        <div class="meta">会话历史 — 本页面不会自动保存对话到服务器。可用右下角按钮清空。</div>
-        <div id="messages" class="messages" aria-live="polite"></div>
-
-        <footer>
-          <textarea id="input" placeholder="输入消息（Shift+Enter 换行）"></textarea>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <button id="sendBtn" class="btn">发送</button>
-            <button id="clearBtn" class="btn secondary">清空</button>
-          </div>
-        </footer>
-      </section>
     </div>
-  </div>
 
-  <script>
-    // 简单的浏览器端 OpenAI Chat 调用演示
-    const apiKeyInput = document.getElementById('apiKey');
-    const modelSelect = document.getElementById('model');
-    const messagesEl = document.getElementById('messages');
-    const inputEl = document.getElementById('input');
-    const sendBtn = document.getElementById('sendBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const systemPromptEl = document.getElementById('systemPrompt');
+    <script>
+        // 🚨 严重安全警告：此 API Key 已硬编码到前端。任何人都可以查看源代码并获取。
+        // 仅用于私人、测试或学习用途。生产环境务必使用后端代理。
+        const AWADO_API_KEY = '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';
+        
+        const modelSelect = document.getElementById('model');
+        const messagesEl = document.getElementById('messages');
+        const inputEl = document.getElementById('input');
+        const sendBtn = document.getElementById('sendBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const systemPromptEl = document.getElementById('systemPrompt');
 
-    // localStorage 保存 apiKey（仅浏览器本地）和会话
-    const LS_KEY = 'local_ai_chat_demo_key_v1';
-    apiKeyInput.value = localStorage.getItem(LS_KEY) || '';
-
-    apiKeyInput.addEventListener('change', () => {
-      localStorage.setItem(LS_KEY, apiKeyInput.value.trim());
-      showSavedNotice();
-    });
-
-    function showSavedNotice(){
-      const s = document.querySelector('.saved');
-      if(!s){
-        const el = document.createElement('div');
-        el.className='saved';
-        el.textContent='已保存到本地';
-        document.querySelector('.controls').appendChild(el);
-        setTimeout(()=>el.remove(),2500);
-      }
-    }
-
-    function addMessage(role, text){
-      const div = document.createElement('div');
-      div.className = 'msg ' + (role==='user'?'user':'ai');
-      div.innerHTML = '<div style="font-size:13px;color:var(--muted);margin-bottom:6px">'+(role==='user'? '你':'AI')+'</div>' +
-                      '<div>' + escapeHtml(text).replace(/\n/g,'<br>') + '</div>';
-      messagesEl.appendChild(div);
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-    }
-
-    function escapeHtml(unsafe){
-      return unsafe
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/\"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    sendBtn.addEventListener('click', sendMessage);
-    clearBtn.addEventListener('click', () => { messagesEl.innerHTML=''; inputEl.value=''; });
-
-    inputEl.addEventListener('keydown', (e)=>{
-      if(e.key === 'Enter' && !e.shiftKey){
-        e.preventDefault(); sendMessage();
-      }
-    });
-
-    async function sendMessage(){
-      const text = inputEl.value.trim();
-      if(!text) return;
-      addMessage('user', text);
-      inputEl.value = '';
-
-      const apiKey = apiKeyInput.value.trim();
-      if(!apiKey){
-        addMessage('ai', '请先在顶部输入你的 OpenAI API Key（以 sk- 开头）');
-        return;
-      }
-
-      // 构造 messages
-      const systemText = systemPromptEl.value.trim();
-      const payloadMessages = [];
-      if(systemText) payloadMessages.push({role:'system', content: systemText});
-      payloadMessages.push({role:'user', content: text});
-
-      addMessage('ai', '正在请求…（如果长时间无响应，请检查控制台的错误）');
-
-      try{
-        // 注意：把 API key 放到浏览器会暴露给客户端，仅用于测试/学习
-        const res = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + apiKey
-          },
-          body: JSON.stringify({
-            model: modelSelect.value,
-            messages: payloadMessages,
-            max_tokens: 800,
-            temperature: 0.7
-          })
-        });
-
-        if(!res.ok){
-          const errText = await res.text();
-          addMessage('ai', '请求失败：' + res.status + '\n' + errText);
-          console.error('OpenAI error', res.status, errText);
-          return;
+        function addMessage(role, text){
+            const div = document.createElement('div');
+            div.className = 'msg ' + (role==='user'?'user':'ai');
+            div.innerHTML = '<div style="font-size:13px; margin-bottom:6px">'+(role==='user'? '你':'AWaDo AI')+'</div>' +
+                            '<div>' + escapeHtml(text).replace(/\n/g,'<br>') + '</div>';
+            messagesEl.appendChild(div);
+            messagesEl.scrollTop = messagesEl.scrollHeight;
         }
 
-        const data = await res.json();
-        // 取第一个选择
-        const reply = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || JSON.stringify(data);
-        // 移除之前的“正在请求…”消息（最后一条 ai）并替换为真实回答
-        // 简单实现：删除最后一条 ai 消息
-        const aiMsgs = messagesEl.querySelectorAll('.msg.ai');
-        if(aiMsgs.length) aiMsgs[aiMsgs.length-1].remove();
-        addMessage('ai', reply.trim());
+        function escapeHtml(unsafe){
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\"/g, "&quot;")
+                .replace(/'/g, "&#039;")
+        }
 
-      }catch(err){
-        console.error(err);
-        addMessage('ai', '调用 API 出错：' + err.message);
-      }
-    }
+        sendBtn.addEventListener('click', sendMessage);
+        clearBtn.addEventListener('click', () => { 
+            messagesEl.innerHTML=''; 
+            inputEl.value=''; 
+            // 清空时重新添加欢迎消息
+            addMessage('ai', '欢迎来到 AWaDo 智能设计助理！我是您的专属助手，可以为您解答关于我们工作室、游戏项目（比如《卡皮巴拉环游世界》）或通用开发问题。请问有什么可以帮到您呢？');
+        });
 
-    // 方便：把本地会话导出为 JSON
-    window.addEventListener('keydown', (e)=>{
-      if(e.ctrlKey && e.key.toLowerCase()==='s'){
-        e.preventDefault();
-        exportConversation();
-      }
-    });
+        inputEl.addEventListener('keydown', (e)=>{
+            if(e.key === 'Enter' && !e.shiftKey){
+                e.preventDefault(); sendMessage();
+            }
+        });
 
-    function exportConversation(){
-      const items = Array.from(messagesEl.children).map(n => ({role: n.classList.contains('user')? 'user':'assistant', text: n.innerText}));
-      const blob = new Blob([JSON.stringify(items, null, 2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = 'conversation.json'; a.click();
-      URL.revokeObjectURL(url);
-    }
+        async function sendMessage(){
+            const text = inputEl.value.trim();
+            if(!text) return;
+            
+            // 在发送前获取当前所有消息，用于上下文传递
+            const existingMsgs = Array.from(messagesEl.children).map(n => {
+                const content = n.children[1] ? n.children[1].innerText : '';
+                const role = n.classList.contains('user') ? 'user' : 'assistant';
+                return { role, content };
+            }).filter(msg => msg.content); 
 
-  </script>
+            addMessage('user', text);
+            inputEl.value = '';
+
+            const apiKey = AWADO_API_KEY; // 硬编码的 API Key
+            if(!apiKey){
+                addMessage('ai', '🚨 API Key 未配置，请检查代码中的 `AWADO_API_KEY` 变量。');
+                return;
+            }
+
+            // 构造 messages
+            const systemText = systemPromptEl.value.trim();
+            const payloadMessages = [];
+            if(systemText) payloadMessages.push({role:'system', content: systemText});
+            
+            // 重要的上下文管理：添加所有历史消息和当前用户消息
+            payloadMessages.push(...existingMsgs);
+            payloadMessages.push({role:'user', content: text});
+
+            addMessage('ai', '正在请求…');
+
+            try{
+                const res = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + apiKey
+                    },
+                    body: JSON.stringify({
+                        model: modelSelect.value,
+                        messages: payloadMessages,
+                        max_tokens: 800,
+                        temperature: 0.7
+                    })
+                });
+
+                // 移除之前的“正在请求…”消息（最后一条 ai）
+                const aiMsgs = messagesEl.querySelectorAll('.msg.ai');
+                if(aiMsgs.length) aiMsgs[aiMsgs.length-1].remove();
+
+                if(!res.ok){
+                    const errText = await res.text();
+                    addMessage('ai', '请求失败：' + res.status + '\n' + errText);
+                    console.error('OpenAI error', res.status, errText);
+                    return;
+                }
+
+                const data = await res.json();
+                const reply = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || JSON.stringify(data);
+                
+                addMessage('ai', reply.trim());
+
+            }catch(err){
+                console.error(err);
+                addMessage('ai', '调用 API 出错：' + err.message);
+            }
+        }
+
+        // 方便：把本地会话导出为 JSON
+        window.addEventListener('keydown', (e)=>{
+            if(e.ctrlKey && e.key.toLowerCase()==='s'){
+                e.preventDefault();
+                exportConversation();
+            }
+        });
+
+        function exportConversation(){
+            const systemPrompt = systemPromptEl.value.trim();
+            const items = Array.from(messagesEl.children).map(n => {
+                const role = n.classList.contains('user')? 'user':'assistant';
+                const content = n.children[1] ? n.children[1].innerText.trim() : ''; 
+                return {role, content};
+            }).filter(item => item.content !== '正在请求…'); 
+            
+            const conversation = {
+                system: systemPrompt,
+                messages: items
+            };
+
+            const blob = new Blob([JSON.stringify(conversation, null, 2)], {type:'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'awado_chat_history.json'; a.click();
+            URL.revokeObjectURL(url);
+        }
+
+    </script>
 </body>
 </html>
